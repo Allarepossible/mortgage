@@ -1,0 +1,6 @@
+.Chart {
+  padding: 20px;
+}
+.rv-xy-plot__inner {
+  overflow: visible;
+}

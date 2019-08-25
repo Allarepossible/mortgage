@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import {
-    XYPlot,
-    XAxis,
-    YAxis,
-    ChartLabel,
-    HorizontalGridLines,
-    VerticalGridLines,
-    LineSeries,
-} from 'react-vis';
 import DatePicker from 'react-datepicker';
+
+import Chart from './components/Chart';
+import PaymentTable from './components/PaymentTable';
+
 import './App.css';
 
-const data = [];
-
-for (let i = 0; i < 20; i++) {
-    const series = [];
-    for (let j = 0; j < 100; j++) {
-        series.push({x: j, y: (i / 10 + 1) * Math.sin((Math.PI * (i + j)) / 50)});
-    }
-    data.push({color: i, key: i, data: series, opacity: 0.8});
-}
-
 const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
-const days = [31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30, 31];
+
+const days = (year) => ([
+    {rus: 'Январь', eng: 'Jan', days: 31},
+    {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
+    {rus: 'Март', eng: 'Mar', days: 31},
+    {rus: 'Апрель', eng: 'Apr', days: 30},
+    {rus: 'Май', eng: 'May', days: 31},
+    {rus: 'Июнь', eng: 'Jun', days: 30},
+    {rus: 'Июль', eng: 'Jul', days: 31},
+    {rus: 'Август', eng: 'Aug', days: 31},
+    {rus: 'Сентябрь', eng: 'Sep', days: 30},
+    {rus: 'Октябрь', eng: 'Oct', days: 31},
+    {rus: 'Ноябрь', eng: 'Nov', days: 30},
+    {rus: 'Декабрь', eng: 'Dec', days: 31}
+]);
+
 const daySeconds = 60 * 60 * 24 * 1000;
 
 class App extends Component {
@@ -58,14 +58,23 @@ class App extends Component {
         const rest = [];
         const percents = [];
         const debt = [];
+        const dates = [];
         let len = 0;
-        const {credit, percent, payment, years} = this.state;
+        const {credit, percent, payment, years, startDate} = this.state;
+        let [, mon, , year] = String(startDate).split(' ');
+        const curDays = days(year);
+        const months = curDays.map(i => i.eng);
+        const index = months.indexOf(mon);
 
         if (years > 0 ) {
             for (let i = 0; i < years; i++) {
                 for (let j = 0; j < 12; j++) {
+                    const curDays = days(year + i);
+                    const ind = j + index >= 12 ? j + index - 12 : j + index;
+
+                    dates.push(`${curDays[ind].rus} ${year + i}`);
                     const creditRest = len === 0 ? credit : rest[len-1];
-                    percents.push(Math.round(creditRest * percent/(100 * 365) * days[j]));
+                    percents.push(Math.round(creditRest * percent/(100 * 365) * curDays[ind].days));
 
                     const debtOne = j === 11 && i === years - 1 ? creditRest : payment - percents[len];
 
@@ -102,11 +111,13 @@ class App extends Component {
             overpayment,
         });
     }
+
     handleChangeStartDate(date) {
         this.setState({
             startDate: date
         });
     }
+
     handleChangeFullPrice(event) {
         const newFullPrice = event.target.value;
 
@@ -117,6 +128,7 @@ class App extends Component {
             this.setValue(newState);
         });
     }
+
     handleChangePercent(event) {
         const newPercent = event.target.value;
 
@@ -127,6 +139,7 @@ class App extends Component {
             this.setValue(newState);
         });
     }
+
     handleChangeInitialFee(event) {
         const newInitialFee = event.target.value;
 
@@ -137,6 +150,7 @@ class App extends Component {
             this.setValue(newState);
         });
     }
+
     handleChangeYears(event) {
         const newYears = event.target.value;
 
@@ -148,20 +162,19 @@ class App extends Component {
         });
     }
 
-
     render() {
-        const Line = LineSeries;
         const tables = this.createTable();
         const {rest, percents, debt} = tables || {};
         const dataPercents = percents && percents.map((item, index) => ({x: index, y: item}));
         const dataPayments = rest && rest.map((_, index) => ({x: index, y: this.state.payment}));
-        const additional = [];
         const diff = new Date() - this.state.startDate;
         const x = diff > daySeconds ? Math.round(diff/daySeconds/31) : 0;
+
+
         return (
             <div className="App">
-                <div className="App-header">
-                    <h2>Mortgage</h2>
+                <div className="header">
+                    <h2>Ипотечный калькулятор</h2>
                 </div>
                 <div className="flex">
                     <div className="column">
@@ -172,14 +185,6 @@ class App extends Component {
                                 onChange={this.handleChangeFullPrice}
                                 id="fullPrice"
                                 className="input"
-                            />
-                        </div>
-                        <div className="inputWrap">
-                            <label htmlFor="start" className="label">Начало ипотеки</label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleChangeStartDate}
-                                id="start"
                             />
                         </div>
                         <div className="inputWrap">
@@ -210,6 +215,14 @@ class App extends Component {
                             />
                         </div>
                         <div className="inputWrap">
+                            <label htmlFor="start" className="label">Начало ипотеки</label>
+                            <DatePicker
+                                selected={this.state.startDate}
+                                onChange={this.handleChangeStartDate}
+                                id="start"
+                            />
+                        </div>
+                        <div className="inputWrap">
                             <button>Внести доп платеж</button>
                         </div>
                     </div>
@@ -220,109 +233,20 @@ class App extends Component {
                     </div>
                     <div className="column">
                         <span>Платежи</span>
-                        <div className="scroll">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>Месяц</th>
-                                    <th>Процент</th>
-                                    <th>В счет долга</th>
-                                    <th>Остаток</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {rest && rest.length > 0 &&
-                                        rest.map((_, index) => (
-                                            <tr>
-                                                <td>{index + 1}</td>
-                                                <td>{normalizePrice(percents[index])}</td>
-                                                <td>{normalizePrice(debt[index])}</td>
-                                                <td>{normalizePrice(rest[index])}</td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-
-                        </div>
+                        <PaymentTable
+                            percents={percents}
+                            debt={debt}
+                            rest={rest}
+                        />
                     </div>
-                    {additional.length > 0 && (
-                        <div className="column">
-                            <span>Доп платежи</span>
-                            <div className="scroll">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Дата</th>
-                                        <th>Сумма</th>
-                                        <th>Изменение платежа</th>
-                                        <th>Текущий платеж</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    { additional.length > 0 &&
-                                    additional.map(item => (
-                                        <tr>
-                                            <td>{item.date}</td>
-                                            <td>{normalizePrice(item.summ)}</td>
-                                            <td>{normalizePrice(item.change)}</td>
-                                            <td>{normalizePrice(item.current)}</td>
-                                        </tr>
-                                    ))
-                                    }
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    )}
                 </div>
 
-                <div className="Graph">
-                    <XYPlot width={1200} height={400} className="inner">
-                        <HorizontalGridLines />
-                        <VerticalGridLines />
-                        <XAxis />
-                        <YAxis />
-                        <ChartLabel
-                            text="Месяцы"
-                            className="alt-x-label"
-                            includeMargin={false}
-                            xPercent={0.025}
-                            yPercent={1.01}
-                        />
-
-                        <ChartLabel
-                            text="Платеж"
-                            className="alt-y-label"
-                            includeMargin={false}
-                            xPercent={0.01}
-                            yPercent={0.06}
-                            style={{
-                                transform: 'rotate(-90)',
-                                textAnchor: 'end'
-                            }}
-                        />
-                        <Line
-                            curve={'curveMonotoneX'}
-                            className="first-series"
-                            style={{fill: 'none'}}
-                            data={dataPercents}
-                        />
-                        <Line
-                            className="fourth-series"
-                            curve={'curveMonotoneX'}
-                            style={{fill: 'none'}}
-                            data={dataPayments}
-                        />
-                        <Line
-                            curve={'curveMonotoneX'}
-                            className="first-series"
-                            style={{fill: 'none'}}
-                            data={[{x, y: 0}, {x, y: this.state.payment}]}
-                        />
-                    </XYPlot>
-                </div>
+                <Chart
+                    dataPercents={dataPercents}
+                    dataPayments={dataPayments}
+                    current={x}
+                    payment={this.state.payment}
+                />
             </div>
         );
     }
