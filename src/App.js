@@ -20,6 +20,7 @@ for (let i = 0; i < 20; i++) {
 }
 
 const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+const days = [31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30, 31];
 
 class App extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class App extends Component {
             dem: 0,
             coef: 0,
             overpayment: 0,
+            tables: {},
         };
 
         this.handleChangeFullPrice = this.handleChangeFullPrice.bind(this);
@@ -47,6 +49,31 @@ class App extends Component {
         this.setValue(this.state);
     }
 
+    createTable() {
+        const rest = [];
+        const percents = [];
+        const debt = [];
+        let len = 0;
+        const {credit, percent, payment, years} = this.state;
+
+        if (years > 0 ) {
+            for (let i = 0; i < years; i++) {
+                for (let j = 0; j < 12; j++) {
+                    const creditRest = len === 0 ? credit : rest[len-1];
+                    percents.push(Math.round(creditRest * percent/(100 * 365) * days[j]));
+
+                    const debtOne = j === 11 && i === years - 1 ? creditRest : payment - percents[len];
+
+                    debt.push(debtOne);
+                    rest.push(creditRest - debt[len]);
+                    len ++;
+                }
+            }
+        } else {
+            return;
+        }
+        return {rest, percents, debt}
+    }
     setValue(state) {
         const {fullPrice, initialFee, percent, years} = state;
         const credit = fullPrice - initialFee;
@@ -57,7 +84,7 @@ class App extends Component {
         const pow = Math.pow(dem, duration);
         const coef = pow * (dem - 1) / (pow - 1);
 
-        const payment = Math.round(coef * credit * 100) / 100;
+        const payment = Math.round(coef * credit);
 
         const overpayment = Math.round(payment * duration - credit);
 
@@ -114,6 +141,9 @@ class App extends Component {
 
     render() {
         const Line = LineSeries;
+        const tables = this.createTable();
+        const {rest, percents, debt} = tables;
+
         return (
             <div className="App">
                 <div className="App-header">
@@ -162,6 +192,34 @@ class App extends Component {
                         <span className="label-s">Ежемесячный платеж: {normalizePrice(this.state.payment)}</span>
                         <span className="label-s">Сумма кредита: {normalizePrice(this.state.credit)}</span>
                         <span className="label-s">Переплата: {normalizePrice(this.state.overpayment)}</span>
+                    </div>
+                    <div className="column">
+                        <span>Платежи</span>
+                        <div className="scroll">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Месяц</th>
+                                    <th>Процент</th>
+                                    <th>В счет долга</th>
+                                    <th>Остаток</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {rest && rest.length > 0 &&
+                                        rest.map((_, index) => (
+                                            <tr>
+                                                <td>{index}</td>
+                                                <td>{normalizePrice(percents[index])}</td>
+                                                <td>{normalizePrice(debt[index])}</td>
+                                                <td>{normalizePrice(rest[index])}</td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
                 </div>
 
