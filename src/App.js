@@ -142,7 +142,9 @@ class App extends Component {
     render() {
         const Line = LineSeries;
         const tables = this.createTable();
-        const {rest, percents, debt} = tables;
+        const {rest, percents, debt} = tables || {};
+        const dataPercents = percents && percents.map((item, index) => ({x: index, y: item}));
+        const dataPayments = rest && rest.map((_, index) => ({x: index, y: this.state.payment}));
 
         return (
             <div className="App">
@@ -209,7 +211,7 @@ class App extends Component {
                                     {rest && rest.length > 0 &&
                                         rest.map((_, index) => (
                                             <tr>
-                                                <td>{index}</td>
+                                                <td>{index + 1}</td>
                                                 <td>{normalizePrice(percents[index])}</td>
                                                 <td>{normalizePrice(debt[index])}</td>
                                                 <td>{normalizePrice(rest[index])}</td>
@@ -223,32 +225,14 @@ class App extends Component {
                     </div>
                 </div>
 
-                <XYPlot
-                    width={300}
-                    height={300}
-                    fill="#fff"
-                    colorType="linear"
-                    colorDomain={[0, 9]}
-                    colorRange={['yellow', 'orange']}
-                >
-                    <HorizontalGridLines />
-                    <VerticalGridLines />
-                    <XAxis />
-                    <YAxis />
-                    {data.map(props => (
-                        <LineSeries {...props} style={{
-                            fill: 'none',
-                        }} />
-                    ))}
-                </XYPlot>
-                <p className="App-intro">
-                    <XYPlot width={300} height={300}>
+                <div className="Graph">
+                    <XYPlot width={1200} height={400} className="inner">
                         <HorizontalGridLines />
                         <VerticalGridLines />
                         <XAxis />
                         <YAxis />
                         <ChartLabel
-                            text="X Axis"
+                            text="Месяцы"
                             className="alt-x-label"
                             includeMargin={false}
                             xPercent={0.025}
@@ -256,10 +240,10 @@ class App extends Component {
                         />
 
                         <ChartLabel
-                            text="Y Axis"
+                            text="Платеж"
                             className="alt-y-label"
                             includeMargin={false}
-                            xPercent={0.06}
+                            xPercent={0.01}
                             yPercent={0.06}
                             style={{
                                 transform: 'rotate(-90)',
@@ -267,43 +251,18 @@ class App extends Component {
                             }}
                         />
                         <Line
-                            style={{
-                                fill: 'none',
-                            }}
-                            className="first-series"
-                            data={[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
-                        />
-                        <Line className="second-series" data={null} />
-                        <Line
-                            className="third-series"
                             curve={'curveMonotoneX'}
-                            style={{
-                                fill: 'none',
-                            }}
-                            data={[{x: 1, y: 10}, {x: 2, y: 4}, {x: 3, y: 2}, {x: 4, y: 15}]}
-                            strokeDasharray={'7, 3'}
-                            fill="none"
+                            className="first-series"
+                            data={dataPercents}
                         />
                         <Line
                             className="fourth-series"
-                            style={{
-                                fill: 'none',
-                                // note that this can not be translated to the canvas version
-                                strokeDasharray: '2 2'
-                            }}
-                            data={[{x: 1, y: 7}, {x: 2, y: 11}, {x: 3, y: 9}, {x: 4, y: 2}]}
+                            curve={'curveMonotoneX'}
+                            style={{fill: 'none'}}
+                            data={dataPayments}
                         />
                     </XYPlot>
-                </p>
-                <XYPlot margin={50} width={200} height={200}>
-                    <VerticalGridLines />
-                    <XAxis />
-                    <YAxis />
-                    <LineSeries data={[{x: 1, y: 10}, {x: 2, y: 5}, {x: 3, y: 15}]} style={{
-                        fill: 'none',
-                    }}/>
-                </XYPlot>
-
+                </div>
             </div>
         );
     }
