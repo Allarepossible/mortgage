@@ -8,7 +8,9 @@ import {
     VerticalGridLines,
     LineSeries,
 } from 'react-vis';
+import DatePicker from 'react-datepicker';
 import './App.css';
+
 const data = [];
 
 for (let i = 0; i < 20; i++) {
@@ -21,6 +23,7 @@ for (let i = 0; i < 20; i++) {
 
 const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const days = [31, 30, 31, 30, 31, 31, 28, 31, 30, 31, 30, 31];
+const daySeconds = 60 * 60 * 24 * 1000;
 
 class App extends Component {
     constructor(props) {
@@ -36,10 +39,12 @@ class App extends Component {
             duration: 0,
             dem: 0,
             coef: 0,
+            startDate: new Date(),
             overpayment: 0,
             tables: {},
         };
 
+        this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
         this.handleChangeFullPrice = this.handleChangeFullPrice.bind(this);
         this.handleChangePercent = this.handleChangePercent.bind(this);
         this.handleChangeInitialFee = this.handleChangeInitialFee.bind(this);
@@ -97,6 +102,11 @@ class App extends Component {
             overpayment,
         });
     }
+    handleChangeStartDate(date) {
+        this.setState({
+            startDate: date
+        });
+    }
     handleChangeFullPrice(event) {
         const newFullPrice = event.target.value;
 
@@ -145,7 +155,9 @@ class App extends Component {
         const {rest, percents, debt} = tables || {};
         const dataPercents = percents && percents.map((item, index) => ({x: index, y: item}));
         const dataPayments = rest && rest.map((_, index) => ({x: index, y: this.state.payment}));
-
+        const additional = [];
+        const diff = new Date() - this.state.startDate;
+        const x = diff > daySeconds ? Math.round(diff/daySeconds/31) : 0;
         return (
             <div className="App">
                 <div className="App-header">
@@ -160,6 +172,14 @@ class App extends Component {
                                 onChange={this.handleChangeFullPrice}
                                 id="fullPrice"
                                 className="input"
+                            />
+                        </div>
+                        <div className="inputWrap">
+                            <label htmlFor="start" className="label">Начало ипотеки</label>
+                            <DatePicker
+                                selected={this.state.startDate}
+                                onChange={this.handleChangeStartDate}
+                                id="start"
                             />
                         </div>
                         <div className="inputWrap">
@@ -188,6 +208,9 @@ class App extends Component {
                                 id="years"
                                 className="input"
                             />
+                        </div>
+                        <div className="inputWrap">
+                            <button>Внести доп платеж</button>
                         </div>
                     </div>
                     <div className="column">
@@ -223,6 +246,36 @@ class App extends Component {
 
                         </div>
                     </div>
+                    {additional.length > 0 && (
+                        <div className="column">
+                            <span>Доп платежи</span>
+                            <div className="scroll">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Сумма</th>
+                                        <th>Изменение платежа</th>
+                                        <th>Текущий платеж</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    { additional.length > 0 &&
+                                    additional.map(item => (
+                                        <tr>
+                                            <td>{item.date}</td>
+                                            <td>{normalizePrice(item.summ)}</td>
+                                            <td>{normalizePrice(item.change)}</td>
+                                            <td>{normalizePrice(item.current)}</td>
+                                        </tr>
+                                    ))
+                                    }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="Graph">
@@ -253,6 +306,7 @@ class App extends Component {
                         <Line
                             curve={'curveMonotoneX'}
                             className="first-series"
+                            style={{fill: 'none'}}
                             data={dataPercents}
                         />
                         <Line
@@ -260,6 +314,12 @@ class App extends Component {
                             curve={'curveMonotoneX'}
                             style={{fill: 'none'}}
                             data={dataPayments}
+                        />
+                        <Line
+                            curve={'curveMonotoneX'}
+                            className="first-series"
+                            style={{fill: 'none'}}
+                            data={[{x, y: 0}, {x, y: this.state.payment}]}
                         />
                     </XYPlot>
                 </div>
