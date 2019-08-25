@@ -13,12 +13,14 @@
   line-height: 24px;
   font-family: sans-serif;
   padding: 10px;
-  color: #0832dc;
+  color: #4b545b;
 }
 
 .input {
-  line-height: 20px;
+  line-height: 25px;
   font-size: 16px;
+  padding: 5px 10px;
+
   border-radius: 4px;
   border: 1px solid #6b6868;
 }
@@ -54,3 +56,27 @@
   display: flex;
 }
 
+.payment {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 50px;
+}
+
+.total {
+  font-weight: bold;
+  color: #53b374;
+  font-size: 17px;
+  margin-bottom: 50px;
+}
+
+.overpayment {
+  font-weight: bold;
+  color: #b32427;
+  font-size: 17px;
+  margin-bottom: 50px;
+}
+
+.big {
+  font-size: 23px;
+}

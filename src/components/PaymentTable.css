@@ -2,3 +2,58 @@
   height: 200px;
   overflow: scroll;
 }
+.table {
+  text-align: center;
+}
+.headline {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0;
+  box-shadow: 1px 2px 6px 3px rgba(0,0,0,.07);
+}
+
+.date {
+  width: 150px;
+}
+
+.headlineItem {
+  color: #4b545b;
+  width: 130px;
+  text-align: right;
+}
+
+.list {
+  height: 250px;
+  overflow-y: auto;
+  flex-direction: column;
+  display: flex;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.07);
+}
+
+.listItemWrap {
+  padding-right: 30px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.listItemWrap:nth-of-type(2n) {
+  background-color: #f8f9fa;
+}
+
+.detail {
+  color: #93989d;
+}
+
+.listItem {
+  padding: 10px 0;
+  width: 130px;
+  text-align: right;
+}
+
+.year {
+  font-size: 11px;
+  color: #93989d;
+  margin-left: 15px;
+}

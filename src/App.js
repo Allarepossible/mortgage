@@ -6,7 +6,7 @@ import PaymentTable from './components/PaymentTable';
 
 import './App.css';
 
-const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';
 
 const days = (year) => ([
     {rus: 'Январь', eng: 'Jan', days: 31},
@@ -64,17 +64,19 @@ class App extends Component {
         let [, mon, , year] = String(startDate).split(' ');
         const curDays = days(year);
         const months = curDays.map(i => i.eng);
-        const index = months.indexOf(mon);
+        const index = months.indexOf(mon) + 1;
 
         if (years > 0 ) {
             for (let i = 0; i < years; i++) {
                 for (let j = 0; j < 12; j++) {
-                    const curDays = days(year + i);
                     const ind = j + index >= 12 ? j + index - 12 : j + index;
-
-                    dates.push(`${curDays[ind].rus} ${year + i}`);
+                    const prev = j + index > 12 ? j + index - 12 - 1 : j + index - 1;
+                    const curYear = j + index >= 12 ? +year + i + 1 : +year + i;
+                    const curDays = days(curYear);
+                    console.log(i,j,curYear, curDays[ind].days, curDays[ind].rus)
+                    dates.push({month: curDays[ind].rus, year: curYear});
                     const creditRest = len === 0 ? credit : rest[len-1];
-                    percents.push(Math.round(creditRest * percent/(100 * 365) * curDays[ind].days));
+                    percents.push(Math.round(creditRest * percent/(100 * 365) * curDays[prev].days));
 
                     const debtOne = j === 11 && i === years - 1 ? creditRest : payment - percents[len];
 
@@ -86,7 +88,7 @@ class App extends Component {
         } else {
             return;
         }
-        return {rest, percents, debt}
+        return {rest, percents, debt, dates}
     }
     setValue(state) {
         const {fullPrice, initialFee, percent, years} = state;
@@ -164,7 +166,7 @@ class App extends Component {
 
     render() {
         const tables = this.createTable();
-        const {rest, percents, debt} = tables || {};
+        const {rest, percents, debt, dates} = tables || {};
         const dataPercents = percents && percents.map((item, index) => ({x: index, y: item}));
         const dataPayments = rest && rest.map((_, index) => ({x: index, y: this.state.payment}));
         const diff = new Date() - this.state.startDate;
@@ -214,29 +216,30 @@ class App extends Component {
                                 className="input"
                             />
                         </div>
-                        <div className="inputWrap">
-                            <label htmlFor="start" className="label">Начало ипотеки</label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleChangeStartDate}
-                                id="start"
-                            />
-                        </div>
-                        <div className="inputWrap">
-                            <button>Внести доп платеж</button>
-                        </div>
+                        {/*<div className="inputWrap">*/}
+                        {/*    <label htmlFor="start" className="label">Начало ипотеки</label>*/}
+                        {/*    <DatePicker*/}
+                        {/*        selected={this.state.startDate}*/}
+                        {/*        onChange={this.handleChangeStartDate}*/}
+                        {/*        id="start"*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                        {/*<div className="inputWrap">*/}
+                        {/*    <button>Внести доп платеж</button>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="column">
-                        <span className="label-s">Ежемесячный платеж: {normalizePrice(this.state.payment)}</span>
-                        <span className="label-s">Сумма кредита: {normalizePrice(this.state.credit)}</span>
-                        <span className="label-s">Переплата: {normalizePrice(this.state.overpayment)}</span>
+                        <span className="payment">Ежемесячный платеж: <span className="big"> {normalizePrice(this.state.payment)}</span></span>
+                        <span className="total">Сумма кредита: <span className="big">{normalizePrice(this.state.credit)}</span></span>
+                        <span className="overpayment">Переплата: <span className="big">{normalizePrice(this.state.overpayment)}</span></span>
                     </div>
                     <div className="column">
-                        <span>Платежи</span>
                         <PaymentTable
                             percents={percents}
                             debt={debt}
                             rest={rest}
+                            dates={dates}
+                            payment={this.state.payment}
                         />
                     </div>
                 </div>
