@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Chart from './components/Chart';
+import Chart2 from './components/Chart2';
 import PaymentTable from './components/PaymentTable';
 
 import './App.css';
@@ -250,6 +251,7 @@ class App extends Component {
                     current={x}
                     payment={this.state.payment}
                 />
+                <Chart2 />
             </div>
         );
     }

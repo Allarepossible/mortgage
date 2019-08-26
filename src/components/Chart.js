@@ -5,6 +5,8 @@ import {
     YAxis,
     ChartLabel,
     HorizontalGridLines,
+    VerticalBarSeries,
+    DiscreteColorLegend,
     VerticalGridLines,
     LineSeries,
 } from 'react-vis';
@@ -18,6 +20,20 @@ const Chart = ({dataPercents, dataPayments, payment, current}) => (
             <VerticalGridLines />
             <XAxis />
             <YAxis />
+            <DiscreteColorLegend
+                style={{position: 'absolute', left: '50px', top: '10px'}}
+                orientation="horizontal"
+                items={[
+                    {
+                        title: 'Apples',
+                        color: '#12939A'
+                    },
+                    {
+                        title: 'Oranges',
+                        color: '#79C7E3'
+                    }
+                ]}
+            />
             <ChartLabel
                 text="Месяцы"
                 className="alt-x-label"
@@ -37,17 +53,20 @@ const Chart = ({dataPercents, dataPayments, payment, current}) => (
                     textAnchor: 'end'
                 }}
             />
-            <LineSeries
-                curve={'curveMonotoneX'}
-                className="first-series"
-                style={{fill: 'none'}}
-                data={dataPercents}
-            />
-            <LineSeries
+            <VerticalBarSeries
+                cluster="2015"
+                color="#79C7E3"
+                onValueMouseOver={(datapoint, event)=>{
+                    console.log(datapoint)
+                }}
                 className="fourth-series"
-                curve={'curveMonotoneX'}
-                style={{fill: 'none'}}
                 data={dataPayments}
+            />
+            <VerticalBarSeries
+                cluster="2015"
+                color="#12939A"
+                className="first-series"
+                data={dataPercents}
             />
             <LineSeries
                 curve={'curveMonotoneX'}
