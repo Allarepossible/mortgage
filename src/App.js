@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Chart from './components/Chart';
-import Chart2 from './components/Chart2';
 import PaymentTable from './components/PaymentTable';
 
 import './App.css';
@@ -33,7 +32,7 @@ class App extends Component {
             fullPrice: 6000000,
             percent: 9.9,
             initialFee: 2500000,
-            years: 15,
+            years: 10,
 
             payment: 0,
             credit: 0,
@@ -51,6 +50,7 @@ class App extends Component {
         this.handleChangeInitialFee = this.handleChangeInitialFee.bind(this);
         this.handleChangeYears = this.handleChangeYears.bind(this);
     }
+
     componentDidMount() {
         this.setValue(this.state);
     }
@@ -216,14 +216,14 @@ class App extends Component {
                                 className="input"
                             />
                         </div>
-                        {/*<div className="inputWrap">*/}
-                        {/*    <label htmlFor="start" className="label">Начало ипотеки</label>*/}
-                        {/*    <DatePicker*/}
-                        {/*        selected={this.state.startDate}*/}
-                        {/*        onChange={this.handleChangeStartDate}*/}
-                        {/*        id="start"*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+                        <div className="inputWrap">
+                            <label htmlFor="start" className="label">Начало ипотеки</label>
+                            <DatePicker
+                                selected={this.state.startDate}
+                                onChange={this.handleChangeStartDate}
+                                id="start"
+                            />
+                        </div>
                         {/*<div className="inputWrap">*/}
                         {/*    <button>Внести доп платеж</button>*/}
                         {/*</div>*/}

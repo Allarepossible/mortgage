@@ -4,7 +4,7 @@ import './PaymentTable.css';
 
 const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';
 
-const PaymentTable = ({rest, percents, debt, dates, payment}) => (
+const PaymentTable = ({rest, percents, debt, dates}) => (
     <div className="table">
         <h3>График платежей</h3>
         <div className="headline">
@@ -17,9 +17,9 @@ const PaymentTable = ({rest, percents, debt, dates, payment}) => (
         <div className="list">
             {rest && rest.length > 0 &&
                 rest.map((_, index) => (
-                    <div className="listItemWrap">
+                    <div className="listItemWrap" key={index}>
                         <div className="listItem date">{dates[index].month} <span className="year">{dates[index].year}</span></div>
-                        <div className="listItem">{normalizePrice(payment)}</div>
+                        <div className="listItem">{normalizePrice(percents[index] + debt[index])}</div>
                         <div className="listItem detail">{normalizePrice(percents[index])}</div>
                         <div className="listItem detail">{normalizePrice(debt[index])}</div>
                         <div className="listItem">{normalizePrice(rest[index])}</div>
