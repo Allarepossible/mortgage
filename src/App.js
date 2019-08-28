@@ -74,7 +74,7 @@ class App extends Component {
                     const prev = j + index > 12 ? j + index - 12 - 1 : j + index - 1;
                     const curYear = j + index >= 12 ? +year + i + 1 : +year + i;
                     const curDays = days(curYear);
-                    console.log(i,j,curYear, curDays[ind].days, curDays[ind].rus)
+
                     dates.push({month: curDays[ind].rus, year: curYear});
                     const creditRest = len === 0 ? credit : rest[len-1];
                     percents.push(Math.round(creditRest * percent/(100 * 365) * curDays[prev].days));
@@ -173,7 +173,6 @@ class App extends Component {
         const diff = new Date() - this.state.startDate;
         const x = diff > daySeconds ? Math.round(diff/daySeconds/31) : 0;
 
-
         return (
             <div className="App">
                 <div className="header">
@@ -244,14 +243,17 @@ class App extends Component {
                         />
                     </div>
                 </div>
+                {
+                    percents[0] > 0 && (
+                        <Chart
+                            dataPercents={dataPercents}
+                            dataPayments={dataPayments}
+                            current={x}
+                            payment={this.state.payment}
+                        />
+                    )
+                }
 
-                <Chart
-                    dataPercents={dataPercents}
-                    dataPayments={dataPayments}
-                    current={x}
-                    payment={this.state.payment}
-                />
-                <Chart2 />
             </div>
         );
     }

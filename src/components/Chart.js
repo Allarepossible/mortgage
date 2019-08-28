@@ -36,12 +36,14 @@ class Chart extends React.Component {
 
     _formatCrosshairItems = values => {
         const {series} = this.state;
-console.log('-------', values)
+        let percent = 0;
+
         return values.map((v, i) => {
-            console.log(v)
+            percent = i === 0 ? v.y : percent;
+
             return {
                 title: series[i].title,
-                value: v.y
+                value: i === 0 ? v.y : v.y - percent,
             };
         });
     };
