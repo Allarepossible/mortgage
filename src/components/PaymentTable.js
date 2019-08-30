@@ -1,10 +1,10 @@
 import React from 'react';
 
+import {normalizePrice} from "../helpers/price";
 import './PaymentTable.css';
 
-const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';
 
-const PaymentTable = ({rest, percents, debt, dates}) => (
+const PaymentTable = ({tables}) => (
     <div className="table">
         <h3>График платежей</h3>
         <div className="headline">
@@ -15,14 +15,14 @@ const PaymentTable = ({rest, percents, debt, dates}) => (
             <div className="headlineItem">Остаток долга</div>
         </div>
         <div className="list">
-            {rest && rest.length > 0 &&
-                rest.map((_, index) => (
+            {tables && tables.length > 0 &&
+                tables.map((item, index) => (
                     <div className="listItemWrap" key={index}>
-                        <div className="listItem date">{dates[index].month} <span className="year">{dates[index].year}</span></div>
-                        <div className="listItem">{normalizePrice(percents[index] + debt[index])}</div>
-                        <div className="listItem detail">{normalizePrice(percents[index])}</div>
-                        <div className="listItem detail">{normalizePrice(debt[index])}</div>
-                        <div className="listItem">{normalizePrice(rest[index])}</div>
+                        <div className="listItem date">{item.date}</div>
+                        <div className="listItem">{normalizePrice(item.amount)}</div>
+                        <div className="listItem detail">{normalizePrice(item.percentAmount)}</div>
+                        <div className="listItem detail">{normalizePrice(item.payOffAmount)}</div>
+                        <div className="listItem">{normalizePrice(item.remainder)}</div>
                     </div>
                 ))
             }

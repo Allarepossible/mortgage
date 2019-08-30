@@ -4,24 +4,9 @@ import DatePicker from 'react-datepicker';
 import Chart from './components/Chart';
 import PaymentTable from './components/PaymentTable';
 
+import {createTable} from './helpers/days';
+import {normalizePrice} from './helpers/price';
 import './App.css';
-
-const normalizePrice = price => String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';
-
-const days = (year) => ([
-    {rus: 'Январь', eng: 'Jan', days: 31},
-    {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
-    {rus: 'Март', eng: 'Mar', days: 31},
-    {rus: 'Апрель', eng: 'Apr', days: 30},
-    {rus: 'Май', eng: 'May', days: 31},
-    {rus: 'Июнь', eng: 'Jun', days: 30},
-    {rus: 'Июль', eng: 'Jul', days: 31},
-    {rus: 'Август', eng: 'Aug', days: 31},
-    {rus: 'Сентябрь', eng: 'Sep', days: 30},
-    {rus: 'Октябрь', eng: 'Oct', days: 31},
-    {rus: 'Ноябрь', eng: 'Nov', days: 30},
-    {rus: 'Декабрь', eng: 'Dec', days: 31}
-]);
 
 const daySeconds = 60 * 60 * 24 * 1000;
 
@@ -41,7 +26,6 @@ class App extends Component {
             coef: 0,
             startDate: new Date(),
             overpayment: 0,
-            tables: {},
         };
 
         this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
@@ -55,42 +39,6 @@ class App extends Component {
         this.setValue(this.state);
     }
 
-    createTable() {
-        const rest = [];
-        const percents = [];
-        const debt = [];
-        const dates = [];
-        let len = 0;
-        const {credit, percent, payment, years, startDate} = this.state;
-        let [, mon, , year] = String(startDate).split(' ');
-        const curDays = days(year);
-        const months = curDays.map(i => i.eng);
-        const index = months.indexOf(mon) + 1;
-
-        if (years > 0 ) {
-            for (let i = 0; i < years; i++) {
-                for (let j = 0; j < 12; j++) {
-                    const ind = j + index >= 12 ? j + index - 12 : j + index;
-                    const prev = j + index > 12 ? j + index - 12 - 1 : j + index - 1;
-                    const curYear = j + index >= 12 ? +year + i + 1 : +year + i;
-                    const curDays = days(curYear);
-
-                    dates.push({month: curDays[ind].rus, year: curYear});
-                    const creditRest = len === 0 ? credit : rest[len-1];
-                    percents.push(Math.round(creditRest * percent/(100 * 365) * curDays[prev].days));
-
-                    const debtOne = j === 11 && i === years - 1 ? creditRest : payment - percents[len];
-
-                    debt.push(debtOne);
-                    rest.push(creditRest - debt[len]);
-                    len ++;
-                }
-            }
-        } else {
-            return;
-        }
-        return {rest, percents, debt, dates}
-    }
     setValue(state) {
         const {fullPrice, initialFee, percent, years} = state;
         const credit = fullPrice - initialFee;
@@ -166,10 +114,8 @@ class App extends Component {
     }
 
     render() {
-        const tables = this.createTable();
-        const {rest, percents, debt, dates} = tables || {};
-        const dataPercents = percents && percents.map((item, index) => ({x: index, y: item}));
-        const dataPayments = rest && rest.map((_, index) => ({x: index, y: this.state.payment}));
+        const {credit, percent, payment, years, startDate} = this.state;
+        const tables = createTable({credit, percent, payment, years, startDate});
         const diff = new Date() - this.state.startDate;
         const x = diff > daySeconds ? Math.round(diff/daySeconds/31) : 0;
 
@@ -233,25 +179,21 @@ class App extends Component {
                         <span className="total">Сумма кредита: <span className="big">{normalizePrice(this.state.credit)}</span></span>
                         <span className="overpayment">Переплата: <span className="big">{normalizePrice(this.state.overpayment)}</span></span>
                     </div>
-                    <div className="column">
-                        <PaymentTable
-                            percents={percents}
-                            debt={debt}
-                            rest={rest}
-                            dates={dates}
-                            payment={this.state.payment}
-                        />
-                    </div>
+                    {tables &&
+                        <div className="column">
+                            <PaymentTable
+                                tables={tables}
+                                payment={this.state.payment}
+                            />
+                        </div>
+                    }
                 </div>
-                {
-                    percents[0] > 0 && (
-                        <Chart
-                            dataPercents={dataPercents}
-                            dataPayments={dataPayments}
-                            current={x}
-                            payment={this.state.payment}
-                        />
-                    )
+                {tables &&
+                    <Chart
+                        tables={tables}
+                        current={x}
+                        payment={this.state.payment}
+                    />
                 }
 
             </div>

@@ -13,22 +13,31 @@ import {
 
 import './Chart.css';
 
+import {normalizePrice} from '../helpers/price';
+
 class Chart extends React.Component {
     constructor(props) {
         super(props);
+        const {tables} = props;
+
+        const dataPercents = tables.map((item, index) => ({x: index, y: item.percentAmount}));
+        const dataPayments = tables.map((_, index) => ({x: index, y: props.payment}));
+
         this.state = {
-            payment: this.props.payment,
+            dataPayments,
+            dataPercents,
+            payment: props.payment,
             crosshairValues: [],
             series: [
                 {
                     title: 'Проценты',
                     disabled: false,
-                    data: props.dataPercents,
+                    data: dataPercents,
                 },
                 {
                     title: 'Основной долг',
                     disabled: false,
-                    data: props.dataPayments,
+                    data: dataPayments,
                 }
             ]
         }
@@ -49,7 +58,7 @@ class Chart extends React.Component {
 
             return {
                 title: series[i].title,
-                value: i === 0 ? v.y : this.props.payment - percent,
+                value: normalizePrice(i === 0 ? v.y : this.props.payment - percent),
             };
         });
     };
@@ -80,7 +89,9 @@ class Chart extends React.Component {
     };
 
     render() {
-        const {dataPercents, dataPayments, payment, current} = this.props;
+        const {payment, current} = this.props;
+        const {dataPayments, dataPercents} = this.state;
+
         const {crosshairValues, series} = this.state;
 
         return (
@@ -94,7 +105,6 @@ class Chart extends React.Component {
                 </div>
                 <XYPlot width={1200} height={400} className="inner" onMouseLeave={this._mouseLeaveHandler}>
                     <HorizontalGridLines />
-                    {/*<VerticalGridLines />*/}
                     <XAxis />
                     <YAxis />
                     <ChartLabel

@@ -1,2 +1,2 @@
 export const normalizePrice = price =>
-    String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';
+    String(Math.round(price * 100) / 100).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' ₽';

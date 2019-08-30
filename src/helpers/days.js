@@ -1,29 +1,28 @@
-export const months = (year) => ([
-    {rus: 'Январь', eng: 'Jan', days: 31},
-    {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
-    {rus: 'Март', eng: 'Mar', days: 31},
-    {rus: 'Апрель', eng: 'Apr', days: 30},
-    {rus: 'Май', eng: 'May', days: 31},
-    {rus: 'Июнь', eng: 'Jun', days: 30},
-    {rus: 'Июль', eng: 'Jul', days: 31},
-    {rus: 'Август', eng: 'Aug', days: 31},
-    {rus: 'Сентябрь', eng: 'Sep', days: 30},
-    {rus: 'Октябрь', eng: 'Oct', days: 31},
-    {rus: 'Ноябрь', eng: 'Nov', days: 30},
-    {rus: 'Декабрь', eng: 'Dec', days: 31}
-]);
+// const months = (year) => ([
+//     {rus: 'Январь', eng: 'Jan', days: 31},
+//     {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
+//     {rus: 'Март', eng: 'Mar', days: 31},
+//     {rus: 'Апрель', eng: 'Apr', days: 30},
+//     {rus: 'Май', eng: 'May', days: 31},
+//     {rus: 'Июнь', eng: 'Jun', days: 30},
+//     {rus: 'Июль', eng: 'Jul', days: 31},
+//     {rus: 'Август', eng: 'Aug', days: 31},
+//     {rus: 'Сентябрь', eng: 'Sep', days: 30},
+//     {rus: 'Октябрь', eng: 'Oct', days: 31},
+//     {rus: 'Ноябрь', eng: 'Nov', days: 30},
+//     {rus: 'Декабрь', eng: 'Dec', days: 31}
+// ]);
 
 const secondsInDay = 60 * 60 * 24 * 1000;
 
-export const days = (year) => months(year).map(({days}) => days);
+const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
 
-export const DaysInYear = (year) => year % 4 === 0 ? 366 : 365;
-
-export const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
-
-export const dayToStr = (day) => `${day.getDate()}.${day.getMonth()}.${day.getFullYear()}`;
+const dayToStr = (day) => `${day.getDate()}.${day.getMonth()}.${day.getFullYear()}`;
 
 export const createTable = ({credit, percent, years, startDate, payment}) => {
+    if (credit === 0 || years === 0) {
+        return;
+    }
     const payments = [];
 
     const startDay = startDate.getDate();
@@ -44,7 +43,7 @@ export const createTable = ({credit, percent, years, startDate, payment}) => {
 
         paymentObj.date = dayToStr(nextPaymentDay);
 
-        const creditRest = i === 0 ? credit : payments[0].remainder;
+        const creditRest = i === 0 ? credit : payments[i - 1].remainder;
 
         paymentObj.percentAmount = creditRest * percent/(100 * 365) * AmountDaysInIntervar;
         paymentObj.payOffAmount = i === years * 12 - 1 ? creditRest : payment - paymentObj.percentAmount;
@@ -64,7 +63,7 @@ export const createTable = ({credit, percent, years, startDate, payment}) => {
 };
 
 
-const getStartValue = ({fullPrice, initialFee, percent, years}) => {
+export const getStartValue = ({fullPrice, initialFee, percent, years}) => {
     const credit = fullPrice - initialFee;
 
     const duration = years * 12;
@@ -85,4 +84,4 @@ const getStartValue = ({fullPrice, initialFee, percent, years}) => {
         coef,
         overpayment,
     };
-}
+};
