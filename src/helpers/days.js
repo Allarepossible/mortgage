@@ -17,7 +17,13 @@ const secondsInDay = 60 * 60 * 24 * 1000;
 
 const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
 
-const dayToStr = (day) => `${day.getDate()}.${day.getMonth()}.${day.getFullYear()}`;
+const dayToStr = (day) => {
+    const dayStr = day.getDate() > 9 ? day.getDate() : `0${day.getDate()}`;
+    const month = day.getMonth() > 9 ? day.getMonth() : `0${day.getMonth()}`;
+
+    return `${dayStr}.${month}.${day.getFullYear()}`;
+}
+
 
 export const createTable = ({credit, percent, years, startDate, payment}) => {
     if (credit === 0 || years === 0) {
