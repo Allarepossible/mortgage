@@ -22,7 +22,7 @@ const dayToStr = (day) => {
     const month = day.getMonth() > 9 ? day.getMonth() : `0${day.getMonth()}`;
 
     return `${dayStr}.${month}.${day.getFullYear()}`;
-}
+};
 
 
 export const createTable = ({credit, percent, years, startDate, payment}) => {
