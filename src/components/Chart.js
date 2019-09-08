@@ -99,11 +99,11 @@ class Chart extends React.Component {
                 <div className="legend">
                     <DiscreteColorLegend
                         onItemClick={this._legendClickHandler}
-                        width={1200}
+                        width={1000}
                         items={series}
                     />
                 </div>
-                <XYPlot width={1200} height={400} className="inner" onMouseLeave={this._mouseLeaveHandler}>
+                <XYPlot width={1000} height={400} className="inner" onMouseLeave={this._mouseLeaveHandler}>
                     <HorizontalGridLines />
                     <XAxis />
                     <YAxis />
