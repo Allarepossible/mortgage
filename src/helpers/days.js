@@ -13,7 +13,7 @@
 //     {rus: 'Декабрь', eng: 'Dec', days: 31}
 // ]);
 
-const secondsInDay = 60 * 60 * 24 * 1000;
+export const secondsInDay = 60 * 60 * 24 * 1000;
 
 const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
 

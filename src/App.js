@@ -4,11 +4,9 @@ import DatePicker from 'react-datepicker';
 import Chart from './components/Chart';
 import PaymentTable from './components/PaymentTable';
 
-import {createTable} from './helpers/days';
+import {createTable, secondsInDay} from './helpers/days';
 import {normalizePrice} from './helpers/price';
 import './App.css';
-
-const daySeconds = 60 * 60 * 24 * 1000;
 
 class App extends Component {
     constructor(props) {
@@ -117,7 +115,7 @@ class App extends Component {
         const {credit, percent, payment, years, startDate} = this.state;
         const tables = createTable({credit, percent, payment, years, startDate});
         const diff = new Date() - this.state.startDate;
-        const x = diff > daySeconds ? Math.round(diff/daySeconds/31) : 0;
+        const x = diff > secondsInDay ? Math.round(diff/secondsInDay/31) : 0;
 
         return (
             <div className="App">
