@@ -111,6 +111,15 @@ class App extends Component {
         });
     }
 
+    handleChangeParams(event, param) {
+        this.setState(prevState => {
+            const newState = prevState;
+            newState[param] = event.target.value;
+
+            this.setValue(newState);
+        });
+    }
+
     render() {
         const {credit, percent, payment, years, startDate} = this.state;
         const tables = createTable({credit, percent, payment, years, startDate});
@@ -155,7 +164,7 @@ class App extends Component {
                             <label htmlFor="years" className="label">Количество лет</label>
                             <input
                                 value={this.state.years}
-                                onChange={this.handleChangeYears}
+                                onChange={e => this.handleChangeParams.bind(this, e, 'years')}
                                 id="years"
                                 className="input"
                             />
