@@ -15,7 +15,8 @@
 
 export const secondsInDay = 60 * 60 * 24 * 1000;
 
-const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
+export const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
+export const DaysInYear = (year) =>  year % 4 === 0 ? 366 : 365;
 
 const dayToStr = (day) => {
     const dayStr = day.getDate() > 9 ? day.getDate() : `0${day.getDate()}`;
