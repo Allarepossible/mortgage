@@ -1,1 +1,3 @@
--#Calculation of mortgage
+#Calculation of mortgage
+
+Visualize payments
