@@ -95,7 +95,7 @@ class Chart extends React.Component {
         const {crosshairValues, series} = this.state;
 
         return (
-            <div className="Chart">
+            <div className="Chart" key={1}>
                 <div className="legend">
                     <DiscreteColorLegend
                         onItemClick={this._legendClickHandler}

@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Chart from './components/Chart';
+import ChartP from './components/ChartPaymentOfYear';
 import PaymentTable from './components/PaymentTable';
 
 import {createTable, secondsInDay} from './helpers/days';
@@ -12,6 +13,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            other: false,
             fullPrice: 6000000,
             percent: 9.9,
             initialFee: 2500000,
@@ -120,6 +122,10 @@ class App extends Component {
         });
     }
 
+    handleOtherGraphs() {
+        this.setState({other: !this.state.other});
+    }
+
     render() {
         const {credit, percent, payment, years, startDate} = this.state;
         const tables = createTable({credit, percent, payment, years, startDate});
@@ -201,6 +207,25 @@ class App extends Component {
                         current={x}
                         payment={this.state.payment}
                     />
+                }
+                <div className="button">
+                    <button onClick={this.handleOtherGraphs.bind(this)}>
+                        {!this.state.other ? 'Показать другие графики' : 'Скрыть другие графики'}
+                    </button>
+                </div>
+                {
+                    this.state.other &&
+                    (
+                        <Fragment>
+                            <h2>Ежемесячный платеж от количества лет</h2>
+                            <ChartP
+                                fullPrice={this.state.fullPrice}
+                                initialFee={this.state.initialFee}
+                                percent={this.state.percent}
+                            />
+                        </Fragment>
+
+                    )
                 }
 
             </div>
