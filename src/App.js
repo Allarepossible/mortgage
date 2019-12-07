@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 
 import Chart from './components/Chart';
 import ChartP from './components/ChartPaymentOfYear';
+import ChartD from './components/ChartOverpaiments';
 import PaymentTable from './components/PaymentTable';
 
 import {createTable, secondsInDay} from './helpers/days';
@@ -205,11 +206,14 @@ class App extends Component {
                 </div>
                 }
                 {tables &&
-                    <Chart
-                        tables={tables}
-                        current={x}
-                        payment={this.state.payment}
-                    />
+                    <div>
+                        <h3>Выплата процентов и погашение задолженности</h3>
+                        <Chart
+                            tables={tables}
+                            current={x}
+                            payment={this.state.payment}
+                        />
+                    </div>
                 }
                 <div className="button">
                     <button onClick={this.handleOtherGraphs.bind(this)}>
@@ -222,6 +226,13 @@ class App extends Component {
                         <Fragment>
                             <h2>Ежемесячный платеж от количества лет</h2>
                             <ChartP
+                                fullPrice={this.state.fullPrice}
+                                initialFee={this.state.initialFee}
+                                percent={this.state.percent}
+                            />
+
+                            <h2>Переплата от количества лет</h2>
+                            <ChartD
                                 fullPrice={this.state.fullPrice}
                                 initialFee={this.state.initialFee}
                                 percent={this.state.percent}
