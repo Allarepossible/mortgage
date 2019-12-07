@@ -17,7 +17,7 @@ class App extends Component {
             fullPrice: 6000000,
             percent: 9.9,
             initialFee: 2500000,
-            years: 10,
+            years: 15,
 
             payment: 0,
             credit: 0,
@@ -135,12 +135,13 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="header">
-                    <h2>Ипотечный калькулятор</h2>
+                    <h1>Ипотечный калькулятор</h1>
                 </div>
                 <div className="flex">
                     <div className="column">
-                        <div className="inputWrap">
-                            <label htmlFor="fullPrice" className="label">Стоимость квартиры</label>
+                        <h2 className="title">Основные параметры ипотеки</h2>
+                        <div className="inputWrap cost">
+                            <label htmlFor="fullPrice" className="label">Стоимость недвижимости</label>
                             <input
                                 value={this.state.fullPrice}
                                 onChange={this.handleChangeFullPrice}
@@ -148,16 +149,8 @@ class App extends Component {
                                 className="input"
                             />
                         </div>
-                        <div className="inputWrap">
-                            <label htmlFor="percent" className="label">Процент</label>
-                            <input
-                                value={this.state.percent}
-                                onChange={this.handleChangePercent}
-                                id="percent"
-                                className="input"
-                            />
-                        </div>
-                        <div className="inputWrap">
+
+                        <div className="inputWrap cost">
                             <label htmlFor="initialFee" className="label">Первоначальный взнос</label>
                             <input
                                 value={this.state.initialFee}
@@ -166,8 +159,17 @@ class App extends Component {
                                 className="input"
                             />
                         </div>
-                        <div className="inputWrap">
-                            <label htmlFor="years" className="label">Количество лет</label>
+                        <div className="inputWrap percent">
+                            <label htmlFor="percent" className="label">Процентная ставка</label>
+                            <input
+                                value={this.state.percent}
+                                onChange={this.handleChangePercent}
+                                id="percent"
+                                className="input"
+                            />
+                        </div>
+                        <div className="inputWrap years">
+                            <label htmlFor="years" className="label">Срок погашения (полных лет)</label>
                             <input
                                 value={this.state.years}
                                 onChange={e => this.handleChangeParams.bind(this, e, 'years')}
@@ -192,15 +194,16 @@ class App extends Component {
                         <span className="total">Сумма кредита: <span className="big">{normalizePrice(this.state.credit)}</span></span>
                         <span className="overpayment">Переплата: <span className="big">{normalizePrice(this.state.overpayment)}</span></span>
                     </div>
-                    {tables &&
-                        <div className="column">
-                            <PaymentTable
-                                tables={tables}
-                                payment={this.state.payment}
-                            />
-                        </div>
-                    }
+
                 </div>
+                {tables &&
+                <div className="flex">
+                    <PaymentTable
+                        tables={tables}
+                        payment={this.state.payment}
+                    />
+                </div>
+                }
                 {tables &&
                     <Chart
                         tables={tables}
