@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Chart from './components/Chart';
-import ChartP from './components/ChartPaymentOfYear';
-import ChartD from './components/ChartOverpaiments';
+import PaymentAndRemainderChart from './containers/PaymentAndRemainderChart';
+import PaymentOfYearsChart from './containers/PaymentOfYearsChart';
+import OverpaimentsChart from './containers/OverpaimentsChart';
 import PaymentTable from './components/PaymentTable';
 
 import {createTable, secondsInDay} from './helpers/days';
@@ -208,7 +208,7 @@ class App extends Component {
                 {tables &&
                     <div>
                         <h3>Выплата процентов и погашение задолженности</h3>
-                        <Chart
+                        <PaymentAndRemainderChart
                             tables={tables}
                             current={x}
                             payment={this.state.payment}
@@ -225,14 +225,14 @@ class App extends Component {
                     (
                         <Fragment>
                             <h2>Ежемесячный платеж от количества лет</h2>
-                            <ChartP
+                            <OverpaimentsChart
                                 fullPrice={this.state.fullPrice}
                                 initialFee={this.state.initialFee}
                                 percent={this.state.percent}
                             />
 
                             <h2>Переплата от количества лет</h2>
-                            <ChartD
+                            <PaymentOfYearsChart
                                 fullPrice={this.state.fullPrice}
                                 initialFee={this.state.initialFee}
                                 percent={this.state.percent}
