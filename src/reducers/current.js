@@ -13,8 +13,6 @@ import {
 } from '../actions';
 
 export default (state = initialState, {type, payload}) => {
-    console.log(payload)
-
     switch (type) {
         case CHANGE_FULL_PRICE:
             return {

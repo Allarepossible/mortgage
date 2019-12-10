@@ -1,40 +1,28 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import ComplexChart from '../../components/ComplexChart';
 import {normalizePrice} from '../../helpers/price';
+import {createTable} from "../../helpers/days";
 
 class PaymentAndRemainderChart extends React.Component {
-    constructor(props) {
-        super(props);
-        const {tables} = props;
-
-        const dataPercents = tables.map((item, index) => ({x: index, y: item.percentAmount}));
-        const dataPayments = tables.map((_, index) => ({x: index, y: props.payment}));
-
-        this.state = {
-            dataPayments,
-            dataPercents,
-            payment: props.payment,
+    static getDerivedStateFromProps(nextProps, prevState) {
+        return {
             crosshairValues: [],
+            ...prevState,
             series: [
                 {
                     title: 'Проценты',
                     disabled: false,
-                    data: dataPercents,
+                    data: nextProps.dataPercents,
                 },
                 {
                     title: 'Основной долг',
                     disabled: false,
-                    data: dataPayments,
+                    data: nextProps.dataPayments,
                 }
             ]
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        const shouldShowPopup = nextState.crosshairValues !== this.state.crosshairValues;
-
-        return nextProps.payment !== this.props.payment || shouldShowPopup;
     }
 
     _formatCrosshairItems = values => {
@@ -77,8 +65,7 @@ class PaymentAndRemainderChart extends React.Component {
     };
 
     render() {
-        const {payment, current} = this.props;
-        const {dataPayments, dataPercents} = this.state;
+        const {payment, current, dataPayments, dataPercents} = this.props;
 
         const {crosshairValues, series} = this.state;
 
@@ -102,4 +89,20 @@ class PaymentAndRemainderChart extends React.Component {
     }
 }
 
-export default PaymentAndRemainderChart;
+const mapStateToProps = ({current}, ownProps) => {
+    const {percent, years} = current;
+    const {credit, payment, startDate} = ownProps;
+
+    const table = createTable({credit, percent, payment, years, startDate});
+    const dataPercents = table.map((item, index) => ({x: index, y: item.percentAmount}));
+    const dataPayments = table.map((_, index) => ({x: index, y: payment}));
+
+console.log('------', dataPercents)
+    return {
+        dataPayments,
+        dataPercents,
+        payment,
+    }
+};
+
+export default connect(mapStateToProps)(PaymentAndRemainderChart);

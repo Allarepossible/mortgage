@@ -27,8 +27,6 @@ class App extends Component {
     render() {
         const {credit, percent, payment, years, startDate, fullPrice, ChangeFullPrice, initialFee, ChangeInitialFee, ChangePercent, ChangeYears, overpayment} = this.props;
         const tables = createTable({credit, percent, payment, years, startDate});
-        const diff = new Date() - startDate;
-        const x = diff > secondsInDay ? Math.round(diff/secondsInDay/31) : 0;
 
         return (
             <div className="App">
@@ -102,8 +100,8 @@ class App extends Component {
                     <div>
                         <h3>Выплата процентов и погашение задолженности</h3>
                         <PaymentAndRemainderChart
-                            tables={tables}
-                            current={x}
+                            startDate={startDate}
+                            credit={credit}
                             payment={payment}
                         />
                     </div>
