@@ -1,12 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {render} from 'react-dom';
+import {createStore} from 'redux'
 
-import App from './App';
-import './index.css';
-import 'react-datepicker/dist/react-datepicker.css';
 import 'react-vis/dist/style.css';
+import Root from './Root';
+import reducers from './reducers'
 
-ReactDOM.render(
-  <App />,
+const store = createStore(reducers)
+
+render(
+  <Root store={store} />,
   document.getElementById('root')
 );

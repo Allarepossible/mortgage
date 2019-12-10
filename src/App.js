@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import DatePicker from 'react-datepicker';
 
 import PaymentAndRemainderChart from './containers/PaymentAndRemainderChart';
 import PaymentOfYearsChart from './containers/PaymentOfYearsChart';
@@ -180,11 +179,7 @@ class App extends Component {
                         </div>
                         <div className="inputWrap">
                             <label htmlFor="start" className="label">Начало ипотеки</label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleChangeStartDate}
-                                id="start"
-                            />
+
                         </div>
                         {/*<div className="inputWrap">*/}
                         {/*    <button>Внести доп платеж</button>*/}
