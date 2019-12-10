@@ -1,10 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
 
 import PaymentAndRemainderChart from './containers/PaymentAndRemainderChart';
 import PaymentOfYearsChart from './containers/PaymentOfYearsChart';
 import OverpaimentsChart from './containers/OverpaimentsChart';
 import PaymentTable from './components/PaymentTable';
 
+import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './actions';
 import {createTable, secondsInDay} from './helpers/days';
 import {normalizePrice} from './helpers/price';
 import './App.css';
@@ -12,114 +14,10 @@ import './App.css';
 class App extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             other: false,
-            fullPrice: 6000000,
-            percent: 9.9,
-            initialFee: 2500000,
-            years: 15,
-
-            payment: 0,
-            credit: 0,
-            duration: 0,
-            dem: 0,
-            coef: 0,
-            startDate: new Date(),
-            overpayment: 0,
         };
-
-        this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
-        this.handleChangeFullPrice = this.handleChangeFullPrice.bind(this);
-        this.handleChangePercent = this.handleChangePercent.bind(this);
-        this.handleChangeInitialFee = this.handleChangeInitialFee.bind(this);
-        this.handleChangeYears = this.handleChangeYears.bind(this);
-    }
-
-    componentDidMount() {
-        this.setValue(this.state);
-    }
-
-    setValue(state) {
-        const {fullPrice, initialFee, percent, years} = state;
-        const credit = fullPrice - initialFee;
-
-        const duration = years * 12;
-        const dem = 1 + percent/1200;
-
-        const pow = Math.pow(dem, duration);
-        const coef = pow * (dem - 1) / (pow - 1);
-
-        const payment = Math.round(coef * credit);
-
-        const overpayment = Math.round(payment * duration - credit);
-
-        this.setState({
-            payment,
-            credit,
-            duration,
-            dem,
-            coef,
-            overpayment,
-        });
-    }
-
-    handleChangeStartDate(date) {
-        this.setState({
-            startDate: date
-        });
-    }
-
-    handleChangeFullPrice(event) {
-        const newFullPrice = event.target.value;
-
-        this.setState(prevState => {
-            const newState = prevState;
-            newState.fullPrice = newFullPrice;
-
-            this.setValue(newState);
-        });
-    }
-
-    handleChangePercent(event) {
-        const newPercent = event.target.value;
-
-        this.setState(prevState => {
-            const newState = prevState;
-            newState.percent = newPercent;
-
-            this.setValue(newState);
-        });
-    }
-
-    handleChangeInitialFee(event) {
-        const newInitialFee = event.target.value;
-
-        this.setState(prevState => {
-            const newState = prevState;
-            newState.initialFee = newInitialFee;
-
-            this.setValue(newState);
-        });
-    }
-
-    handleChangeYears(event) {
-        const newYears = event.target.value;
-
-        this.setState(prevState => {
-            const newState = prevState;
-            newState.years = newYears;
-
-            this.setValue(newState);
-        });
-    }
-
-    handleChangeParams(event, param) {
-        this.setState(prevState => {
-            const newState = prevState;
-            newState[param] = event.target.value;
-
-            this.setValue(newState);
-        });
     }
 
     handleOtherGraphs() {
@@ -127,9 +25,9 @@ class App extends Component {
     }
 
     render() {
-        const {credit, percent, payment, years, startDate} = this.state;
+        const {credit, percent, payment, years, startDate, fullPrice, ChangeFullPrice, initialFee, ChangeInitialFee, ChangePercent, ChangeYears, overpayment} = this.props;
         const tables = createTable({credit, percent, payment, years, startDate});
-        const diff = new Date() - this.state.startDate;
+        const diff = new Date() - startDate;
         const x = diff > secondsInDay ? Math.round(diff/secondsInDay/31) : 0;
 
         return (
@@ -143,8 +41,8 @@ class App extends Component {
                         <div className="inputWrap cost">
                             <label htmlFor="fullPrice" className="label">Стоимость недвижимости</label>
                             <input
-                                value={this.state.fullPrice}
-                                onChange={this.handleChangeFullPrice}
+                                value={fullPrice}
+                                onChange={ChangeFullPrice}
                                 id="fullPrice"
                                 className="input"
                             />
@@ -153,8 +51,8 @@ class App extends Component {
                         <div className="inputWrap cost">
                             <label htmlFor="initialFee" className="label">Первоначальный взнос</label>
                             <input
-                                value={this.state.initialFee}
-                                onChange={this.handleChangeInitialFee}
+                                value={initialFee}
+                                onChange={ChangeInitialFee}
                                 id="initialFee"
                                 className="input"
                             />
@@ -162,8 +60,8 @@ class App extends Component {
                         <div className="inputWrap percent">
                             <label htmlFor="percent" className="label">Процентная ставка</label>
                             <input
-                                value={this.state.percent}
-                                onChange={this.handleChangePercent}
+                                value={percent}
+                                onChange={ChangePercent}
                                 id="percent"
                                 className="input"
                             />
@@ -171,8 +69,8 @@ class App extends Component {
                         <div className="inputWrap years">
                             <label htmlFor="years" className="label">Срок погашения (полных лет)</label>
                             <input
-                                value={this.state.years}
-                                onChange={e => this.handleChangeParams.bind(this, e, 'years')}
+                                value={years}
+                                onChange={ChangeYears}
                                 id="years"
                                 className="input"
                             />
@@ -186,9 +84,9 @@ class App extends Component {
                         {/*</div>*/}
                     </div>
                     <div className="column">
-                        <span className="payment">Ежемесячный платеж: <span className="big"> {normalizePrice(this.state.payment)}</span></span>
-                        <span className="total">Сумма кредита: <span className="big">{normalizePrice(this.state.credit)}</span></span>
-                        <span className="overpayment">Переплата: <span className="big">{normalizePrice(this.state.overpayment)}</span></span>
+                        <span className="payment">Ежемесячный платеж: <span className="big"> {normalizePrice(payment)}</span></span>
+                        <span className="total">Сумма кредита: <span className="big">{normalizePrice(credit)}</span></span>
+                        <span className="overpayment">Переплата: <span className="big">{normalizePrice(overpayment)}</span></span>
                     </div>
 
                 </div>
@@ -196,7 +94,7 @@ class App extends Component {
                 <div className="flex">
                     <PaymentTable
                         tables={tables}
-                        payment={this.state.payment}
+                        payment={payment}
                     />
                 </div>
                 }
@@ -206,7 +104,7 @@ class App extends Component {
                         <PaymentAndRemainderChart
                             tables={tables}
                             current={x}
-                            payment={this.state.payment}
+                            payment={payment}
                         />
                     </div>
                 }
@@ -221,16 +119,16 @@ class App extends Component {
                         <Fragment>
                             <h2>Ежемесячный платеж от количества лет</h2>
                             <OverpaimentsChart
-                                fullPrice={this.state.fullPrice}
-                                initialFee={this.state.initialFee}
-                                percent={this.state.percent}
+                                fullPrice={fullPrice}
+                                initialFee={initialFee}
+                                percent={percent}
                             />
 
                             <h2>Переплата от количества лет</h2>
                             <PaymentOfYearsChart
-                                fullPrice={this.state.fullPrice}
-                                initialFee={this.state.initialFee}
-                                percent={this.state.percent}
+                                fullPrice={fullPrice}
+                                initialFee={initialFee}
+                                percent={percent}
                             />
                         </Fragment>
 
@@ -242,4 +140,39 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = ({current}) => {
+    const {fullPrice, percent, initialFee, years} = current;
+    const credit = fullPrice - initialFee;
+
+    const duration = years * 12;
+    const dem = 1 + percent/1200;
+
+    const pow = Math.pow(dem, duration);
+    const coef = pow * (dem - 1) / (pow - 1);
+
+    const payment = Math.round(coef * credit);
+
+    const overpayment = Math.round(payment * duration - credit);
+
+    return {
+        fullPrice,
+        percent,
+        initialFee,
+        years,
+        payment,
+        credit,
+        duration,
+        dem,
+        coef,
+        overpayment,
+        startDate: new Date(),
+    }
+};
+const mapDispatchToProps = {
+    ChangeFullPrice: changeFullPrice,
+    ChangePercent: changePercent,
+    ChangeInitialFee: changeInitialFee,
+    ChangeYears: changeYears
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

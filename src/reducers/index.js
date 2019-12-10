@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 
-import chartReducer from './chartReducer';
+import current from './current';
 
 export default combineReducers({
-    chart: chartReducer,
+    current: current,
 });
