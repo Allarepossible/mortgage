@@ -31,7 +31,6 @@ const ComplexChart = ({
     <div className="Chart" key={1}>
         <div className="legend">
             <DiscreteColorLegend
-                onItemClick={onItemClick}
                 width={1000}
                 items={items}
             />
@@ -60,16 +59,15 @@ const ComplexChart = ({
                 }}
             />
             <VerticalBarSeries
-                cluster="2015"
-                color="#79C7E3"
-                className="fourth-series"
+                cluster="1"
+                color="#ad97e2"
                 data={firstData}
+                className="fourth-series"
             />
             <VerticalBarSeries
                 onNearestX={onNearestX}
-                cluster="2015"
-                color="#12939A"
-                className="first-series"
+                cluster="1"
+                color="#fad16a"
                 data={secondData}
             />
             <LineSeries

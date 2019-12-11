@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import { Pie } from 'react-chartjs-2';
 import {connect} from 'react-redux';
 
 import PaymentAndRemainderChart from './containers/PaymentAndRemainderChart';
@@ -85,8 +86,49 @@ class App extends Component {
                         <span className="payment">Ежемесячный платеж: <span className="big"> {normalizePrice(payment)}</span></span>
                         <span className="total">Сумма кредита: <span className="big">{normalizePrice(credit)}</span></span>
                         <span className="overpayment">Переплата: <span className="big">{normalizePrice(overpayment)}</span></span>
+                        <span className=" all">Долг + проценты: <span className="big">{normalizePrice(overpayment + credit)}</span></span>
                     </div>
+                    <div className="column">
+                        <Pie data={{
+                            labels: [
+                                'Сумма кредита',
+                                'Сумма переплаты'
+                            ],
+                            datasets: [{
+                                data: [credit, overpayment],
+                                backgroundColor: [
+                                    '#53b374',
+                                    '#fad16a',
+                                ],
+                                hoverBackgroundColor: [
+                                    '#53b374',
+                                    '#fad16a',
+                                ]
+                            }]
+                        }} options={{
+                            responsive: true,
+                            title: {
+                                display: true,
+                                text: 'Sample tooltip with border'
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: (tooltipItem, data) => {
+                                        const money = data.datasets[0].data[tooltipItem.index];
 
+                                        return ` ${data.labels[tooltipItem.index]}: ${normalizePrice(money)}`;
+                                    },
+                                    afterLabel: (tooltipItem, data) => {
+                                        const money = data.datasets[0].data[tooltipItem.index];
+
+                                        return `\n${Math.round(money * 100/(overpayment + credit))} % от всей суммы`;
+                                    }
+
+                                },
+                                width: '100px',
+                            },
+                        }}/>
+                    </div>
                 </div>
                 {tables &&
                 <div className="flex">

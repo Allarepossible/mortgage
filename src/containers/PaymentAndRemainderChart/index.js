@@ -13,11 +13,13 @@ class PaymentAndRemainderChart extends React.Component {
             series: [
                 {
                     title: 'Проценты',
+                    color: '#fad16a',
                     disabled: false,
                     data: nextProps.dataPercents,
                 },
                 {
                     title: 'Основной долг',
+                    color: '#ad97e2',
                     disabled: false,
                     data: nextProps.dataPayments,
                 }
@@ -97,7 +99,6 @@ const mapStateToProps = ({current}, ownProps) => {
     const dataPercents = table.map((item, index) => ({x: index, y: item.percentAmount}));
     const dataPayments = table.map((_, index) => ({x: index, y: payment}));
 
-console.log('------', dataPercents)
     return {
         dataPayments,
         dataPercents,

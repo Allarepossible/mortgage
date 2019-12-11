@@ -1,6 +1,6 @@
 .Chart {
   padding: 20px;
 }
-.rv-xy-plot__inner {
-  overflow: visible;
+.fourth-series rect {
+  margin: 0 1px;
 }
