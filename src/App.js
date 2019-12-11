@@ -86,9 +86,7 @@ class App extends Component {
                         <span className="payment">Ежемесячный платеж: <span className="big"> {normalizePrice(payment)}</span></span>
                         <span className="total">Сумма кредита: <span className="big">{normalizePrice(credit)}</span></span>
                         <span className="overpayment">Переплата: <span className="big">{normalizePrice(overpayment)}</span></span>
-                        <span className=" all">Долг + проценты: <span className="big">{normalizePrice(overpayment + credit)}</span></span>
-                    </div>
-                    <div className="column">
+                        <span className="all">Долг + проценты: <span className="big">{normalizePrice(overpayment + credit)}</span></span>
                         <Pie data={{
                             labels: [
                                 'Сумма кредита',
@@ -107,9 +105,9 @@ class App extends Component {
                             }]
                         }} options={{
                             responsive: true,
-                            title: {
-                                display: true,
-                                text: 'Sample tooltip with border'
+                            legend: {
+                                position: 'top',
+                                reverse: true,
                             },
                             tooltips: {
                                 callbacks: {

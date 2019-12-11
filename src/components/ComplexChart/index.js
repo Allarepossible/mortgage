@@ -1,88 +1,78 @@
 import React from 'react';
 import {
-    XYPlot,
-    XAxis,
-    YAxis,
-    ChartLabel,
-    HorizontalGridLines,
-    VerticalBarSeries,
-    DiscreteColorLegend,
-    LineSeries,
-    Crosshair,
-} from 'react-vis';
+    Bar
+} from 'react-chartjs-2';
 
 import './index.css';
 
 const ComplexChart = ({
-    onItemClick,
-    onMouseLeave,
-    onNearestX,
-    xLabel,
-    yLabel,
-    firstData,
-    secondData,
-    current,
-    itemsFormat,
-    titleFormat,
-    crosshairValues,
-    items,
-    payment,
+    dates,
+    debet,
+    percent,
 }) => (
-    <div className="Chart" key={1}>
-        <div className="legend">
-            <DiscreteColorLegend
-                width={1000}
-                items={items}
-            />
-        </div>
-        <XYPlot width={1000} height={400} className="inner" onMouseLeave={onMouseLeave}>
-            <HorizontalGridLines />
-            <XAxis />
-            <YAxis />
-            <ChartLabel
-                text={xLabel}
-                className="alt-x-label"
-                includeMargin={false}
-                xPercent={0.01}
-                yPercent={1.13}
-            />
-
-            <ChartLabel
-                text={yLabel}
-                className="alt-y-label"
-                includeMargin={false}
-                xPercent={-0.06}
-                yPercent={0.06}
-                style={{
-                    transform: 'rotate(-90)',
-                    textAnchor: 'end'
-                }}
-            />
-            <VerticalBarSeries
-                cluster="1"
-                color="#ad97e2"
-                data={firstData}
-                className="fourth-series"
-            />
-            <VerticalBarSeries
-                onNearestX={onNearestX}
-                cluster="1"
-                color="#fad16a"
-                data={secondData}
-            />
-            <LineSeries
-                curve={'curveMonotoneX'}
-                className="first-series"
-                style={{fill: 'none'}}
-                data={[{x: current, y: 0}, {x: current, y: payment}]}
-            />
-            <Crosshair
-                itemsFormat={itemsFormat}
-                titleFormat={titleFormat}
-                values={crosshairValues}
-            />
-        </XYPlot>
-    </div>
+    <Bar
+        data={{
+            aspectRatio: 2.5,
+            labels: dates,
+            datasets: [{
+                label: 'Основной долг',
+                data: debet,
+                backgroundColor: 'rgb(147, 112, 219, 0.7)',
+            },{
+                label: 'Проценты',
+                data: percent,
+                backgroundColor: 'rgb(255, 204, 51, 0.7)',
+            }]
+        }}
+        options={{
+            tooltips: {
+                mode: 'index',
+                callbacks: {
+                    title: function(tooltipItem){
+                        return this._data.labels[tooltipItem[0].index];
+                    },
+                    label: function(tooltipItems, data) {
+                        return data.datasets[tooltipItems.datasetIndex].label;
+                    },
+                }
+            },
+            scales: {
+                xAxes: [{
+                    stacked: true,
+                    type: 'category',
+                    gridLines: {
+                        color: '#dde5e7'
+                    },
+                    ticks: {
+                        maxRotation: 0,
+                        autoSkip: false,
+                        callback: function(value, index, values) {
+                            console.log('==========', value, index, values)
+                        }
+                    }
+                }],
+                yAxes: [{
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        display: false
+                    },
+                    gridLines: {
+                        display: false,
+                        color: '#dde5e7',
+                        drawBorder: false
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Ежемесячный платеж'
+                    },
+                }]
+            },
+            legend: {
+                position: 'bottom',
+            }
+        }}
+    />
 );
 
 export default ComplexChart;
