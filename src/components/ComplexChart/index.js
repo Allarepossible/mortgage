@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Bar
 } from 'react-chartjs-2';
+import {normalizePrice} from '../../helpers/price';
 
 import './index.css';
 
@@ -17,7 +18,7 @@ const ComplexChart = ({
             datasets: [{
                 label: 'Основной долг',
                 data: debet,
-                backgroundColor: 'rgb(147, 112, 219, 0.7)',
+                backgroundColor: '#53b374',
             },{
                 label: 'Проценты',
                 data: percent,
@@ -32,8 +33,16 @@ const ComplexChart = ({
                         return this._data.labels[tooltipItem[0].index];
                     },
                     label: function(tooltipItems, data) {
-                        return data.datasets[tooltipItems.datasetIndex].label;
+                        return data.datasets[tooltipItems.datasetIndex].label +': ' + normalizePrice(tooltipItems.yLabel);
                     },
+                    beforeBody: function (tooltipItems) {
+                        var total = 0;
+                        for (var i in tooltipItems) {
+                            total+= tooltipItems[i].yLabel
+                        }
+                        total = Math.round(total * 100) / 100;
+                        return "Платеж: " + normalizePrice(total) + "\n"
+                    }
                 }
             },
             scales: {
@@ -46,8 +55,24 @@ const ComplexChart = ({
                     ticks: {
                         maxRotation: 0,
                         autoSkip: false,
-                        callback: function(value, index, values) {
-                            console.log('==========', value, index, values)
+                        callback: function (value, index, values) {
+                            if (values.length > 24) {
+                                var year = value.substr(-4);
+
+                                if (value.indexOf('Январь') === 0) {
+                                    return year;
+                                } else {
+                                    return null;
+                                }
+                            } else {
+                                // менее 24 мес.
+                                if (values.length > 11) {
+                                    return index % 2 === 0 ? value.split(' ')[0].substr(0, 3) + ' ' + value.split(' ')[1] : null
+                                } else {
+                                    return value.split(' ')[0].substr(0, 3) + ' ' + value.split(' ')[1]
+                                }
+                            }
+
                         }
                     }
                 }],

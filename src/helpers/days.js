@@ -1,17 +1,17 @@
-// const months = (year) => ([
-//     {rus: 'Январь', eng: 'Jan', days: 31},
-//     {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
-//     {rus: 'Март', eng: 'Mar', days: 31},
-//     {rus: 'Апрель', eng: 'Apr', days: 30},
-//     {rus: 'Май', eng: 'May', days: 31},
-//     {rus: 'Июнь', eng: 'Jun', days: 30},
-//     {rus: 'Июль', eng: 'Jul', days: 31},
-//     {rus: 'Август', eng: 'Aug', days: 31},
-//     {rus: 'Сентябрь', eng: 'Sep', days: 30},
-//     {rus: 'Октябрь', eng: 'Oct', days: 31},
-//     {rus: 'Ноябрь', eng: 'Nov', days: 30},
-//     {rus: 'Декабрь', eng: 'Dec', days: 31}
-// ]);
+const months = (year) => ([
+    {rus: 'Январь', eng: 'Jan', days: 31},
+    {rus: 'Февраль', eng: 'Feb', days: year % 4 === 0 ? 29 : 28},
+    {rus: 'Март', eng: 'Mar', days: 31},
+    {rus: 'Апрель', eng: 'Apr', days: 30},
+    {rus: 'Май', eng: 'May', days: 31},
+    {rus: 'Июнь', eng: 'Jun', days: 30},
+    {rus: 'Июль', eng: 'Jul', days: 31},
+    {rus: 'Август', eng: 'Aug', days: 31},
+    {rus: 'Сентябрь', eng: 'Sep', days: 30},
+    {rus: 'Октябрь', eng: 'Oct', days: 31},
+    {rus: 'Ноябрь', eng: 'Nov', days: 30},
+    {rus: 'Декабрь', eng: 'Dec', days: 31}
+]);
 
 export const secondsInDay = 60 * 60 * 24 * 1000;
 
@@ -25,6 +25,9 @@ const dayToStr = (day) => {
     return `${dayStr}.${month}.${day.getFullYear()}`;
 };
 
+const dayMonth = (day) => {
+    return `${months()[day.getMonth()].rus} ${day.getFullYear()}`;
+};
 
 export const createTable = ({credit, percent, years, startDate, payment}) => {
     if (credit === 0 || years === 0) {
@@ -49,6 +52,7 @@ export const createTable = ({credit, percent, years, startDate, payment}) => {
         let AmountDaysInIntervar = daysInterval(currentDay, nextPaymentDay);
 
         paymentObj.date = dayToStr(nextPaymentDay);
+        paymentObj.month = dayMonth(nextPaymentDay);
 
         const creditRest = i === 0 ? credit : payments[i - 1].remainder;
 

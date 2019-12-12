@@ -137,7 +137,7 @@ class App extends Component {
                 </div>
                 }
                 {tables &&
-                    <div>
+                <div className="flex">
                         <h3>Выплата процентов и погашение задолженности</h3>
                         <PaymentAndRemainderChart
                             startDate={startDate}
