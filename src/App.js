@@ -8,7 +8,7 @@ import OverpaimentsChart from './containers/OverpaimentsChart';
 import PaymentTable from './components/PaymentTable';
 
 import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './actions';
-import {createTable, secondsInDay} from './helpers/days';
+import {createTable} from './helpers/days';
 import {normalizePrice} from './helpers/price';
 import './App.css';
 
