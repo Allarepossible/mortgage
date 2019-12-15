@@ -12,12 +12,14 @@ import {
     CHANGE_YEARS,
 } from '../actions';
 
+const priceToNumber = price => price.replace(/[^\d]/g, '');
+
 export default (state = initialState, {type, payload}) => {
     switch (type) {
         case CHANGE_FULL_PRICE:
             return {
                 ...state,
-                fullPrice: payload,
+                fullPrice: priceToNumber(payload),
             };
         case CHANGE_PERCENT:
             return {
@@ -27,7 +29,7 @@ export default (state = initialState, {type, payload}) => {
         case CHANGE_INITIAL_FEE:
             return {
                 ...state,
-                initialFee: payload,
+                initialFee: priceToNumber(payload),
             };
         case CHANGE_YEARS:
             return {

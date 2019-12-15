@@ -6,6 +6,7 @@ import PaymentAndRemainderChart from './containers/PaymentAndRemainderChart';
 import PaymentOfYearsChart from './containers/PaymentOfYearsChart';
 import OverpaimentsChart from './containers/OverpaimentsChart';
 import PaymentTable from './components/PaymentTable';
+import Input from './components/Input';
 
 import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './actions';
 import {createTable} from './helpers/days';
@@ -37,25 +38,22 @@ class App extends Component {
                 <div className="flex">
                     <div className="column">
                         <h2 className="title">Основные параметры ипотеки</h2>
-                        <div className="inputWrap cost">
-                            <label htmlFor="fullPrice" className="label">Стоимость недвижимости</label>
-                            <input
-                                value={fullPrice}
-                                onChange={ChangeFullPrice}
-                                id="fullPrice"
-                                className="input"
-                            />
-                        </div>
+                        <Input
+                            id="fullPrice"
+                            price={fullPrice}
+                            changeInput={ChangeFullPrice}
+                            title="Стоимость недвижимости"
+                            type="cost"
+                        />
 
-                        <div className="inputWrap cost">
-                            <label htmlFor="initialFee" className="label">Первоначальный взнос</label>
-                            <input
-                                value={initialFee}
-                                onChange={ChangeInitialFee}
-                                id="initialFee"
-                                className="input"
-                            />
-                        </div>
+                        <Input
+                            id="initialFee"
+                            price={initialFee}
+                            changeInput={ChangeInitialFee}
+                            title="Первоначальный взнос"
+                            type="cost"
+                        />
+
                         <div className="inputWrap percent">
                             <label htmlFor="percent" className="label">Процентная ставка</label>
                             <input
