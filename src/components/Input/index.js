@@ -6,7 +6,7 @@ import './index.css';
 
 const Input = ({
     id,
-    price,
+    value,
     changeInput,
     title,
     type,
@@ -14,7 +14,7 @@ const Input = ({
     <div className="inputWrap cost">
         <label htmlFor={id} className="label">{title}</label>
         <input
-            value={normalizePrice(price)}
+            value={type === 'cost' ? normalizePrice(value): value}
             onChange={changeInput}
             id={id}
             className="input"

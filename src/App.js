@@ -40,7 +40,7 @@ class App extends Component {
                         <h2 className="title">Основные параметры ипотеки</h2>
                         <Input
                             id="fullPrice"
-                            price={fullPrice}
+                            value={fullPrice}
                             changeInput={ChangeFullPrice}
                             title="Стоимость недвижимости"
                             type="cost"
@@ -48,30 +48,28 @@ class App extends Component {
 
                         <Input
                             id="initialFee"
-                            price={initialFee}
+                            value={initialFee}
                             changeInput={ChangeInitialFee}
                             title="Первоначальный взнос"
                             type="cost"
                         />
 
-                        <div className="inputWrap percent">
-                            <label htmlFor="percent" className="label">Процентная ставка</label>
-                            <input
-                                value={percent}
-                                onChange={ChangePercent}
-                                id="percent"
-                                className="input"
-                            />
-                        </div>
-                        <div className="inputWrap years">
-                            <label htmlFor="years" className="label">Срок погашения (полных лет)</label>
-                            <input
-                                value={years}
-                                onChange={ChangeYears}
-                                id="years"
-                                className="input"
-                            />
-                        </div>
+                        <Input
+                            id="percent"
+                            value={percent}
+                            changeInput={ChangePercent}
+                            title="Процент"
+                            type="percent"
+                        />
+
+                        <Input
+                            id="years"
+                            value={years}
+                            changeInput={ChangeYears}
+                            title="Срок погашения (полных лет)"
+                            type="years"
+                        />
+
                         <div className="inputWrap">
                             <label htmlFor="start" className="label">Начало ипотеки</label>
 
