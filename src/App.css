@@ -13,15 +13,21 @@ body {
 .header {
   width: 100%;
   display: flex;
-  justify-content: center;
   background-color: #55fff875;
-  font-size: 18px;
-  line-height: 24px;
   font-family: sans-serif;
   padding: 10px;
   color: #4b545b;
 }
-
+.header__container {
+  justify-content: center;
+  font-size: 18px;
+  line-height: 24px;
+}
+.container {
+  display: flex;
+  width: 1300px;
+  margin: 0 auto;
+}
 .column {
   width: 50%;
   display: flex;

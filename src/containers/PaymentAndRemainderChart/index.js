@@ -2,7 +2,6 @@ import {connect} from 'react-redux';
 
 import ComplexChart from '../../components/ComplexChart';
 import {createTable} from "../../helpers/days";
-import './index.css';
 
 const mapStateToProps = ({current}, ownProps) => {
     const {percent: p, years} = current;

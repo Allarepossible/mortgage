@@ -1,10 +1,9 @@
 import React from 'react';
 
-import {normalizePrice} from "../helpers/price";
-import './PaymentTable.css';
+import {normalizePrice} from "../../helpers/price";
+import './index.css';
 
-
-const PaymentTable = ({tables}) => (
+const Table = ({table}) => (
     <div className="table">
         <h3>График платежей</h3>
         <div className="headline">
@@ -15,8 +14,8 @@ const PaymentTable = ({tables}) => (
             <div className="headlineItem">Остаток долга</div>
         </div>
         <div className="list">
-            {tables && tables.length > 0 &&
-                tables.map((item, index) => (
+            {table && table.length > 0 &&
+                table.map((item, index) => (
                     <div className="listItemWrap" key={index}>
                         <div className="listItem date">{item.date}</div>
                         <div className="listItem">{normalizePrice(item.amount)}</div>
@@ -30,4 +29,4 @@ const PaymentTable = ({tables}) => (
     </div>
 );
 
-export default PaymentTable;
+export default Table;
