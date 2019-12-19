@@ -7,6 +7,7 @@ import PaymentOfYearsChart from './containers/PaymentOfYearsChart';
 import OverpaimentsChart from './containers/OverpaimentsChart';
 import PaymentTable from './containers/PaymentTable';
 import Input from './components/Input';
+import SimplePie from './components/SimplePie';
 
 import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './actions';
 import {normalizePrice} from './helpers/price';
@@ -84,56 +85,20 @@ class App extends Component {
                             <span className="total">Сумма кредита: <span className="big">{normalizePrice(credit)}</span></span>
                             <span className="overpayment">Переплата: <span className="big">{normalizePrice(overpayment)}</span></span>
                             <span className="all">Долг + проценты: <span className="big">{normalizePrice(overpayment + credit)}</span></span>
-                            <Pie data={{
-                                labels: [
-                                    'Сумма кредита',
-                                    'Сумма переплаты'
-                                ],
-                                datasets: [{
-                                    data: [credit, overpayment],
-                                    backgroundColor: [
-                                        '#53b374',
-                                        '#fad16a',
-                                    ],
-                                    hoverBackgroundColor: [
-                                        '#53b374',
-                                        '#fad16a',
-                                    ]
-                                }]
-                            }} options={{
-                                responsive: true,
-                                legend: {
-                                    position: 'top',
-                                    reverse: true,
-                                },
-                                tooltips: {
-                                    callbacks: {
-                                        label: (tooltipItem, data) => {
-                                            const money = data.datasets[0].data[tooltipItem.index];
-
-                                            return ` ${data.labels[tooltipItem.index]}: ${normalizePrice(money)}`;
-                                        },
-                                        afterLabel: (tooltipItem, data) => {
-                                            const money = data.datasets[0].data[tooltipItem.index];
-
-                                            return `\n${Math.round(money * 100/(overpayment + credit))} % от всей суммы`;
-                                        }
-
-                                    },
-                                    width: '100px',
-                                },
-                            }}/>
+                        </div>
+                        <div className="column">
+                            <SimplePie overpayment={overpayment} credit={credit}/>
                         </div>
                     </div>
                 </div>
-                <div className="flex">
+                <div className="container">
                     <PaymentTable
                         startDate={startDate}
                         credit={credit}
                         payment={payment}
                     />
                 </div>
-                <div className="flex">
+                <div className="container column">
                     <h3>Выплата процентов и погашение задолженности</h3>
                     <PaymentAndRemainderChart
                         startDate={startDate}
