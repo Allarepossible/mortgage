@@ -12,9 +12,21 @@ import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './a
 import {normalizePrice} from './helpers/price';
 import './App.css';
 
-const App = () => {
+const App = ({
+    credit,
+    percent,
+    payment,
+    years,
+    startDate,
+    fullPrice,
+    initialFee,
+    overpayment,
+    ChangeFullPrice,
+    ChangeInitialFee,
+    ChangePercent,
+    ChangeYears,
+}) => {
     const [other, setOther] = useState(false);
-    const {credit, percent, payment, years, startDate, fullPrice, ChangeFullPrice, initialFee, ChangeInitialFee, ChangePercent, ChangeYears, overpayment} = this.props;
 
     return (
         <div className="App">
@@ -119,10 +131,9 @@ const App = () => {
 
                 )
             }
-
         </div>
     );
-}
+};
 
 const mapStateToProps = ({current}) => {
     const {fullPrice, percent, initialFee, years} = current;
@@ -152,6 +163,7 @@ const mapStateToProps = ({current}) => {
         startDate: new Date(),
     }
 };
+
 const mapDispatchToProps = {
     ChangeFullPrice: changeFullPrice,
     ChangePercent: changePercent,
