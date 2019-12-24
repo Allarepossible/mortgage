@@ -114,19 +114,21 @@ const App = ({
                 other &&
                 (
                     <Fragment>
-                        <h2>Ежемесячный платеж от количества лет</h2>
-                        <OverpaimentsChart
-                            fullPrice={fullPrice}
-                            initialFee={initialFee}
-                            percent={percent}
-                        />
+                        <div className="container column">
+                            <h2>Ежемесячный платеж от количества лет</h2>
+                            <OverpaimentsChart
+                                fullPrice={fullPrice}
+                                initialFee={initialFee}
+                                percent={percent}
+                            />
 
-                        <h2>Переплата от количества лет</h2>
-                        <PaymentOfYearsChart
-                            fullPrice={fullPrice}
-                            initialFee={initialFee}
-                            percent={percent}
-                        />
+                            <h2>Переплата от количества лет</h2>
+                            <PaymentOfYearsChart
+                                fullPrice={fullPrice}
+                                initialFee={initialFee}
+                                percent={percent}
+                            />
+                        </div>
                     </Fragment>
 
                 )
