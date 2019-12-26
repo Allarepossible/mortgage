@@ -12,7 +12,22 @@ import {changeFullPrice, changePercent, changeInitialFee, changeYears} from './a
 import {normalizePrice} from './helpers/price';
 import './App.css';
 
-const App = ({
+interface Props {
+    credit: number;
+    percent: number;
+    payment: number;
+    years: number;
+    startDate: number;
+    fullPrice: number;
+    initialFee: number;
+    overpayment: number;
+    ChangeFullPrice: number;
+    ChangeInitialFee: number;
+    ChangePercent: number;
+    ChangeYears: number;
+}
+
+const App: React.FC<Props> = ({
     credit,
     percent,
     payment,
@@ -137,7 +152,9 @@ const App = ({
     );
 };
 
-const mapStateToProps = ({current}) => {
+const mapStateToProps = ({current}: {current: {
+        fullPrice: number, percent: number, initialFee: number, years: number
+    }}) => {
     const {fullPrice, percent, initialFee, years} = current;
     const credit = fullPrice - initialFee;
 
