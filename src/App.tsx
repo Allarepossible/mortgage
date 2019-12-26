@@ -17,22 +17,22 @@ interface Props {
     percent: number;
     payment: number;
     years: number;
-    startDate: number;
     fullPrice: number;
     initialFee: number;
     overpayment: number;
+}
+interface ActionsProps {
     ChangeFullPrice: number;
     ChangeInitialFee: number;
     ChangePercent: number;
     ChangeYears: number;
 }
 
-const App: React.FC<Props> = ({
+const App: React.FC<Props & ActionsProps> = ({
     credit,
     percent,
     payment,
     years,
-    startDate,
     fullPrice,
     initialFee,
     overpayment,
@@ -107,7 +107,7 @@ const App: React.FC<Props> = ({
             </div>
             <div className="container">
                 <PaymentTable
-                    startDate={startDate}
+                    startDate={new Date()}
                     credit={credit}
                     payment={payment}
                 />
@@ -115,7 +115,7 @@ const App: React.FC<Props> = ({
             <div className="container column">
                 <h3>Выплата процентов и погашение задолженности</h3>
                 <PaymentAndRemainderChart
-                    startDate={startDate}
+                    startDate={new Date()}
                     credit={credit}
                     payment={payment}
                 />
@@ -154,7 +154,7 @@ const App: React.FC<Props> = ({
 
 const mapStateToProps = ({current}: {current: {
         fullPrice: number, percent: number, initialFee: number, years: number
-    }}) => {
+    }}): Props => {
     const {fullPrice, percent, initialFee, years} = current;
     const credit = fullPrice - initialFee;
 
@@ -175,11 +175,7 @@ const mapStateToProps = ({current}: {current: {
         years,
         payment,
         credit,
-        duration,
-        dem,
-        coef,
         overpayment,
-        startDate: new Date(),
     }
 };
 
