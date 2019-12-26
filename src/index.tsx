@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react'
 import {render} from 'react-dom';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 
 import Root from './Root';
-import reducers from './reducers'
+import reducers from './reducers';
 
 const store = createStore(
     reducers,
@@ -14,6 +14,6 @@ const store = createStore(
 );
 
 render(
-    <Root store={store} />,
+    <Root/>,
     document.getElementById('root'),
 );
