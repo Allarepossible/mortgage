@@ -3,6 +3,7 @@ import {Provider} from 'react-redux'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import App from './App'
 
+// @ts-ignore
 const Root = ({store}) => (
     <Provider store={store}>
         <Router>

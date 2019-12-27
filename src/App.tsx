@@ -22,10 +22,10 @@ interface Props {
     overpayment: number;
 }
 interface ActionsProps {
-    ChangeFullPrice: number;
-    ChangeInitialFee: number;
-    ChangePercent: number;
-    ChangeYears: number;
+    ChangeFullPrice: () => void;
+    ChangeInitialFee: () => void;
+    ChangePercent: () => void;
+    ChangeYears: () => void;
 }
 
 const App: React.FC<Props & ActionsProps> = ({
@@ -179,7 +179,7 @@ const mapStateToProps = ({current}: {current: {
     }
 };
 
-const mapDispatchToProps = {
+const mapDispatchToProps: ActionsProps = {
     ChangeFullPrice: changeFullPrice,
     ChangePercent: changePercent,
     ChangeInitialFee: changeInitialFee,

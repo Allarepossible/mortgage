@@ -1,3 +1,5 @@
+import { action } from 'typesafe-actions';
+
 export const CHANGE_FULL_PRICE = 'CHANGE_FULL_PRICE';
 export const CHANGE_PERCENT = 'CHANGE_PERCENT';
 export const CHANGE_INITIAL_FEE = 'CHANGE_INITIAL_FEE';

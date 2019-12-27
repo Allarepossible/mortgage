@@ -10,7 +10,7 @@ import reducers from './reducers';
 
 const store = createStore(
     reducers,
-    window.INITIAL_STATE,
+    (window as any).INITIAL_STATE,
     composeWithDevTools(applyMiddleware(thunk))
 );
 
