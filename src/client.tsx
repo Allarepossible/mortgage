@@ -33,7 +33,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
         <Provider store={store}>
             <Router>
-                <div>{renderRoutes(Routes)}</div>
+                {renderRoutes(Routes)}
             </Router>
         </Provider>
     </ThemeProvider>,

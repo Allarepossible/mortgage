@@ -10,8 +10,7 @@ import Input from 'components/Input';
 import SimplePie from 'components/SimplePie';
 import {normalizePrice} from 'helpers/price';
 
-import {App as StyledApp, Header, HeaderContainer,
-    Container, Column, Big, Overpayment, Payment, Title, Total, All} from './styles';
+import {App as StyledApp, Container, Column, Big, Overpayment, Payment, Title, Total, All} from './styles';
 
 interface Props {
     credit: number;
@@ -55,11 +54,6 @@ const Index: React.FC<Props & ActionsProps> = ({
 
     return (
         <StyledApp>
-            <Header>
-                <HeaderContainer>
-                    <h1>Ипотечный калькулятор</h1>
-                </HeaderContainer>
-            </Header>
             <Container>
                 <Column>
                     <Title>Основные параметры ипотеки</Title>

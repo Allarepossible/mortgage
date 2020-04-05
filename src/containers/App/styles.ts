@@ -7,24 +7,6 @@ export const App = styled.div`
     padding-bottom: 50px;
 `;
 
-export const Header = styled.div`
-    width: 100%;
-    display: flex;
-    background-color: #55fff875;
-    font-family: sans-serif;
-    padding: 10px;
-    color: #4b545b;
-`;
-
-export const HeaderContainer = styled.div`
-    display: flex;
-    width: 1300px;
-    margin: 0 auto;
-    justify-content: center;
-    font-size: 18px;
-    line-height: 24px;
-`;
-
 export const Container = styled.div`
     display: flex;
     width: 1300px;

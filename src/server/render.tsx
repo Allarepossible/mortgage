@@ -26,7 +26,7 @@ export default ({clientStats}) => (req, res) => {
             <ThemeProvider theme={theme}>
                 <Provider store={store}>
                     <StaticRouter location={req.originalUrl} context={context}>
-                        <div>{renderRoutes(Routes)}</div>
+                        {renderRoutes(Routes)}
                     </StaticRouter>
                 </Provider>
             </ThemeProvider>
@@ -64,6 +64,7 @@ export default ({clientStats}) => (req, res) => {
                 <html lang='ru'>
                     <head>
                         <meta name='theme-color' content='#000000'/>
+                        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,500" />
                         ${helmet.title}
                         ${helmet.meta.toString()}
                         ${helmet.link.toString()}
