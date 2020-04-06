@@ -8,8 +8,9 @@ const ComplexChart = ({
     percent,
 }) => (
     <Bar
+        height={100}
         data={{
-            aspectRatio: 2.5,
+            aspectRatio: 4,
             labels: dates,
             datasets: [{
                 label: 'Основной долг',

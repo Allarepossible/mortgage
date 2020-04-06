@@ -1,11 +1,11 @@
 import React from 'react';
 
 import {normalizePrice} from 'helpers/price';
-import {Table as StyledTable, Headline, HeadlineItem, List, ListItemWrap, Date, Detail} from './styles';
+import {Table as StyledTable, Headline, HeadlineItem, List, ListItemWrap, Detail, Title} from './styles';
 
 const Table = ({table}) => (
     <StyledTable>
-        <h3>График платежей</h3>
+        <Title>График платежей</Title>
         <Headline>
             <HeadlineItem>Месяц/год</HeadlineItem>
             <HeadlineItem>Платеж</HeadlineItem>
@@ -17,7 +17,7 @@ const Table = ({table}) => (
             {table && table.length > 0 &&
                 table.map((item, index) => (
                     <ListItemWrap key={index}>
-                        <Date>{item.date}</Date>
+                        <div>{item.date}</div>
                         <div>{normalizePrice(item.amount)}</div>
                         <Detail>{normalizePrice(item.percentAmount)}</Detail>
                         <Detail>{normalizePrice(item.payOffAmount)}</Detail>

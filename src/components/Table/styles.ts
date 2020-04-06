@@ -14,12 +14,12 @@ export const Headline = styled.div`
 
 export const HeadlineItem = styled.div`
     color: #4b545b;
-    width: 130px;
-    text-align: right;;
+    width: 20%;
+    text-align: center;
 `;
 
 export const List = styled.div`
-    height: 250px;
+    height: 350px;
     overflow-y: auto;
     flex-direction: column;
     display: flex;
@@ -27,14 +27,14 @@ export const List = styled.div`
 `;
 
 export const ListItemWrap = styled.div`
-    padding-right: 30px;
+    padding-right: 20px;
     font-size: 14px;
     display: flex;
     align-items: center;
         
     & > div {
         padding: 10px 0;
-        width: 130px;
+        width: 20%;
         text-align: right
     }
     
@@ -43,8 +43,8 @@ export const ListItemWrap = styled.div`
     }
 `;
 
-export const Date = styled.div`
-    width: 150px;
+export const Title = styled.h2`
+    margin-bottom: 30px;
 `;
 
 export const Detail = styled.div`

@@ -1,32 +1,26 @@
 import styled from 'styled-components';
 
-export const App = styled.div`
+export const Row = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 50px;
-`;
-
-export const Container = styled.div`
-    display: flex;
-    width: 1300px;
-    margin: 0 auto;
-`;
-
-export const Column = styled.div`
-    width: 50%;
-    display: flex;
-    padding: 20px;
-    flex-direction: column;
-    
+    width: 100%;
+   
     & + & {
-        margin-left: 40px;
+        border-top: 1px solid #eee;
     }
 `;
 
-export const Flex = styled.div`
+export const Column = styled.div`
     display: flex;
     width: 100%;
+    flex-direction: column;
+`;
+
+export const Info = styled(Column)`
+    padding: 30px 40px;
+    
+    & + & {
+        border-left: 1px solid #eee;
+   }
 `;
 
 export const Payment = styled.span`
@@ -44,8 +38,8 @@ export const Total = styled.span`
 `;
 
 export const Title = styled.h2`
-    width: 100%;
-    text-align: center;
+    text-align: left;
+    margin-top: 0;
     margin-bottom: 40px;
 `;
 

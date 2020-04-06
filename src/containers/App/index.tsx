@@ -1,33 +1,25 @@
 import React, {useState, Fragment} from 'react';
 import {connect} from 'react-redux';
 
-import {changeFullPrice, changePercent, changeInitialFee, changeYears, Target} from 'actions';
 import PaymentAndRemainderChart from 'containers/PaymentAndRemainderChart';
 import PaymentOfYearsChart from 'containers/PaymentOfYearsChart';
 import OverpaimentsChart from 'containers/OverpaimentsChart';
 import PaymentTable from 'containers/PaymentTable';
-import Input from 'components/Input';
-import SimplePie from 'components/SimplePie';
+import Form from 'containers/Form';
+// import SimplePie from 'components/SimplePie';
 import {normalizePrice} from 'helpers/price';
 
-import {App as StyledApp, Container, Column, Big, Overpayment, Payment, Title, Total, All} from './styles';
+import {Row, Column, Big, Overpayment, Payment, Title, Total, All, Info} from './styles';
 
 interface Props {
     credit: number;
     percent: number;
     payment: number;
-    years: number;
     fullPrice: number;
     initialFee: number;
     overpayment: number;
 }
 
-interface ActionsProps {
-    ChangeFullPrice: ({target}: Target) => void;
-    ChangeInitialFee: ({target}: Target) => void;
-    ChangePercent: ({target}: Target) => void;
-    ChangeYears: ({target}: Target) => void;
-}
 interface State {
     current: {
         fullPrice: number;
@@ -37,62 +29,25 @@ interface State {
     };
 }
 
-const Index: React.FC<Props & ActionsProps> = ({
+const Index: React.FC<Props> = ({
     credit,
     percent,
     payment,
-    years,
     fullPrice,
     initialFee,
     overpayment,
-    ChangeFullPrice,
-    ChangeInitialFee,
-    ChangePercent,
-    ChangeYears,
 }) => {
     const [other, setOther] = useState(false);
 
     return (
-        <StyledApp>
-            <Container>
-                <Column>
-                    <Title>Основные параметры ипотеки</Title>
-                    <Input
-                        id="fullPrice"
-                        value={fullPrice}
-                        changeInput={ChangeFullPrice}
-                        title="Стоимость недвижимости"
-                        type="cost"
-                    />
-                    <Input
-                        id="initialFee"
-                        value={initialFee}
-                        changeInput={ChangeInitialFee}
-                        title="Первоначальный взнос"
-                        type="cost"
-                    />
-                    <Input
-                        id="percent"
-                        value={percent}
-                        changeInput={ChangePercent}
-                        title="Процент"
-                        type="percent"
-                    />
-                    <Input
-                        id="years"
-                        value={years}
-                        changeInput={ChangeYears}
-                        title="Срок погашения (полных лет)"
-                        type="years"
-                    />
-                    {/*<div className="inputWrap">*/}
-                    {/*    <label htmlFor="start" className="label">Начало ипотеки</label>*/}
-                    {/*</div>*/}
-                    {/*<div className="inputWrap">*/}
-                    {/*    <button>Внести доп платеж</button>*/}
-                    {/*</div>*/}
-                </Column>
-                <Column>
+        <Column>
+            <Row>
+                <Info>
+                    <Title>Калькулятор</Title>
+                    <Form />
+                </Info>
+                <Info>
+                    {/*<SimplePie overpayment={overpayment} credit={credit}/>*/}
                     <Payment>Ежемесячный платеж:
                         <Big> {normalizePrice(payment)}</Big>
                     </Payment>
@@ -105,55 +60,54 @@ const Index: React.FC<Props & ActionsProps> = ({
                     <All>Долг + проценты:
                         <Big>{normalizePrice(overpayment + credit)}</Big>
                     </All>
-                </Column>
-                <Column>
-                    <SimplePie overpayment={overpayment} credit={credit}/>
-                </Column>
-            </Container>
-            <Container>
-                <PaymentTable
-                    startDate={new Date()}
-                    credit={credit}
-                    payment={payment}
-                />
-            </Container>
-            <Column>
-                <h3>Выплата процентов и погашение задолженности</h3>
-                <PaymentAndRemainderChart
-                    startDate={new Date()}
-                    credit={credit}
-                    payment={payment}
-                />
-            </Column>
-            <div className="button">
-                <button onClick={() => setOther(!other)}>
-                    {!other ? 'Показать другие графики' : 'Скрыть другие графики'}
-                </button>
-            </div>
-            {
-                other &&
-                (
-                    <Fragment>
-                        <Column>
-                            <h2>Ежемесячный платеж от количества лет</h2>
-                            <OverpaimentsChart
-                                fullPrice={fullPrice}
-                                initialFee={initialFee}
-                                percent={percent}
-                            />
+                </Info>
+            </Row>
+            <Row>
+                <Info>
+                    <PaymentTable
+                        startDate={new Date()}
+                        credit={credit}
+                        payment={payment}
+                    />
+                </Info>
+                <Info>
+                    <h3>Выплата процентов и погашение задолженности</h3>
+                    <PaymentAndRemainderChart
+                        startDate={new Date()}
+                        credit={credit}
+                        payment={payment}
+                    />
+                    <div className="button">
+                        <button onClick={() => setOther(!other)}>
+                            {!other ? 'Показать другие графики' : 'Скрыть другие графики'}
+                        </button>
+                    </div>
+                    {
+                        other &&
+                        (
+                            <Fragment>
+                                <Column>
+                                    <h2>Ежемесячный платеж от количества лет</h2>
+                                    <OverpaimentsChart
+                                        fullPrice={fullPrice}
+                                        initialFee={initialFee}
+                                        percent={percent}
+                                    />
 
-                            <h2>Переплата от количества лет</h2>
-                            <PaymentOfYearsChart
-                                fullPrice={fullPrice}
-                                initialFee={initialFee}
-                                percent={percent}
-                            />
-                        </Column>
-                    </Fragment>
+                                    <h2>Переплата от количества лет</h2>
+                                    <PaymentOfYearsChart
+                                        fullPrice={fullPrice}
+                                        initialFee={initialFee}
+                                        percent={percent}
+                                    />
+                                </Column>
+                            </Fragment>
 
-                )
-            }
-        </StyledApp>
+                        )
+                    }
+                </Info>
+            </Row>
+        </Column>
     );
 };
 
@@ -175,18 +129,10 @@ const mapStateToProps = ({current}: State): Props => {
         fullPrice,
         percent,
         initialFee,
-        years,
         payment,
         credit,
         overpayment,
     };
 };
 
-const mapDispatchToProps: ActionsProps = {
-    ChangeFullPrice: changeFullPrice,
-    ChangePercent: changePercent,
-    ChangeInitialFee: changeInitialFee,
-    ChangeYears: changeYears,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+export default connect(mapStateToProps)(Index);
