@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 
 import PaymentAndRemainderChart from 'containers/PaymentAndRemainderChart';
@@ -9,7 +9,7 @@ import Form from 'containers/Form';
 // import SimplePie from 'components/SimplePie';
 import {normalizePrice} from 'helpers/price';
 
-import {Row, Column, Big, Overpayment, Payment, Title, Total, All, Info} from './styles';
+import {Row, Column, Big, Overpayment, Payment, Title, Total, BigInfo, SmallInfo} from './styles';
 
 interface Props {
     credit: number;
@@ -36,80 +36,58 @@ const Index: React.FC<Props> = ({
     fullPrice,
     initialFee,
     overpayment,
-}) => {
-    const [other, setOther] = useState(false);
+}) => (
+    <Column>
+        <Row>
+            <BigInfo>
+                <Title>Калькулятор</Title>
+                <Form />
+            </BigInfo>
+            <SmallInfo>
+                {/*<SimplePie overpayment={overpayment} credit={credit}/>*/}
+                <Payment>Ежемесячный платеж:
+                    <Big> {normalizePrice(payment)}</Big>
+                </Payment>
+                <Total>Сумма кредита:
+                    <Big>{normalizePrice(credit)}</Big>
+                </Total>
+                <Overpayment>Переплата:
+                    <Big>{normalizePrice(overpayment)}</Big>
+                </Overpayment>
+            </SmallInfo>
+        </Row>
+        <Row>
+            <SmallInfo>
+                <PaymentTable
+                    startDate={new Date()}
+                    credit={credit}
+                    payment={payment}
+                />
+            </SmallInfo>
+            <BigInfo>
+                <h3>Выплата процентов и погашение задолженности</h3>
+                <PaymentAndRemainderChart
+                    startDate={new Date()}
+                    credit={credit}
+                    payment={payment}
+                />
+                <h3>Переплата от количества лет</h3>
+                <OverpaimentsChart
+                    fullPrice={fullPrice}
+                    initialFee={initialFee}
+                    percent={percent}
+                />
 
-    return (
-        <Column>
-            <Row>
-                <Info>
-                    <Title>Калькулятор</Title>
-                    <Form />
-                </Info>
-                <Info>
-                    {/*<SimplePie overpayment={overpayment} credit={credit}/>*/}
-                    <Payment>Ежемесячный платеж:
-                        <Big> {normalizePrice(payment)}</Big>
-                    </Payment>
-                    <Total>Сумма кредита:
-                        <Big>{normalizePrice(credit)}</Big>
-                    </Total>
-                    <Overpayment>Переплата:
-                        <Big>{normalizePrice(overpayment)}</Big>
-                    </Overpayment>
-                    <All>Долг + проценты:
-                        <Big>{normalizePrice(overpayment + credit)}</Big>
-                    </All>
-                </Info>
-            </Row>
-            <Row>
-                <Info>
-                    <PaymentTable
-                        startDate={new Date()}
-                        credit={credit}
-                        payment={payment}
-                    />
-                </Info>
-                <Info>
-                    <h3>Выплата процентов и погашение задолженности</h3>
-                    <PaymentAndRemainderChart
-                        startDate={new Date()}
-                        credit={credit}
-                        payment={payment}
-                    />
-                    <div className="button">
-                        <button onClick={() => setOther(!other)}>
-                            {!other ? 'Показать другие графики' : 'Скрыть другие графики'}
-                        </button>
-                    </div>
-                    {
-                        other &&
-                        (
-                            <Fragment>
-                                <Column>
-                                    <h2>Ежемесячный платеж от количества лет</h2>
-                                    <OverpaimentsChart
-                                        fullPrice={fullPrice}
-                                        initialFee={initialFee}
-                                        percent={percent}
-                                    />
-
-                                    <h2>Переплата от количества лет</h2>
-                                    <PaymentOfYearsChart
-                                        fullPrice={fullPrice}
-                                        initialFee={initialFee}
-                                        percent={percent}
-                                    />
-                                </Column>
-                            </Fragment>
-
-                        )
-                    }
-                </Info>
-            </Row>
-        </Column>
-    );
-};
+                <h3>Ежемесячный платеж от количества лет</h3>
+                <PaymentOfYearsChart
+                    fullPrice={fullPrice}
+                    initialFee={initialFee}
+                    percent={percent}
+                />
+            </BigInfo>
+        </Row>
+    </Column>
+);
 
 const mapStateToProps = ({current}: State): Props => {
     const {fullPrice, percent, initialFee, years} = current;

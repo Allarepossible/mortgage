@@ -3,15 +3,20 @@ import {Bar} from 'react-chartjs-2';
 
 import {normalizePrice} from 'helpers/price';
 
+export const ticksCallbackY = (v: number) => {
+    return v % 100 === 0 ? normalizePrice(v) : null;
+};
+
 const SimpleChart = ({xLabel, yLabel, data}) => (
     <Bar
+        height={100}
         data={{
             aspectRatio: 2.5,
             labels: data.map(i => i.x),
             datasets: [{
-                label: 'Основной долг',
+                label: yLabel,
                 data: data.map(i => i.y),
-                backgroundColor: '#53b374',
+                backgroundColor: '#3f82a4',
             }],
         }}
         options={{
@@ -43,8 +48,11 @@ const SimpleChart = ({xLabel, yLabel, data}) => (
                 yAxes: [{
                     stacked: true,
                     ticks: {
+                        padding: 10,
                         beginAtZero: true,
-                        display: false,
+                        display: true,
+                        fontColor: '#AAABAD',
+                        callback: v => ticksCallbackY(v),
                     },
                     gridLines: {
                         color: '#dde5e7',
@@ -57,7 +65,7 @@ const SimpleChart = ({xLabel, yLabel, data}) => (
                 }],
             },
             legend: {
-                position: 'bottom',
+                display: false,
             },
         }}
     />

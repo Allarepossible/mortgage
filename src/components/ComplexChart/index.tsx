@@ -15,11 +15,11 @@ const ComplexChart = ({
             datasets: [{
                 label: 'Основной долг',
                 data: debet,
-                backgroundColor: '#53b374',
+                backgroundColor: 'rgba(69,141,174,0.9)',
             }, {
                 label: 'Проценты',
                 data: percent,
-                backgroundColor: 'rgb(255, 204, 51, 0.7)',
+                backgroundColor: 'rgb(180, 0, 0, 0.5)',
             }],
         }}
         options={{

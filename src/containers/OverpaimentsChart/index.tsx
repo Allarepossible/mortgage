@@ -25,7 +25,7 @@ class OverpaimentsChart extends Component<Props, State> {
         const credit = fullPrice - initialFee;
         const over = [] as Data[];
 
-        for (let i = 3; i < 30; i++) {
+        for (let i = 3; i < 31; i++) {
             const duration = i * 12;
             const dem = 1 + percent/1200;
 
