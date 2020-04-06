@@ -19,6 +19,7 @@ export const Wrapper = styled.input`
     padding: 5px 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    box-sizing: border-box;
 `;
 
 export const Box = styled.div<{ disabled?: boolean }>`
@@ -49,7 +50,8 @@ export const Tag = styled.div<{ val?: number; design?: 'outline' | 'material' }>
     margin: 0px;
     
     &:last-child {
-        left: 0px;
+        right: 0px;
+        left: auto;
     }
 
     &:first-child {
@@ -76,11 +78,11 @@ export const Line = styled.div<{
         bottom: 0px;
         border-bottom-style: solid;
         border-bottom-width: 4px;
-        border-bottom-color: rgb(254, 230, 0);
+        border-bottom-color: #3f82a4;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
         left: 0px;
-        width: 99.16px;
+        ${({val}) => `width: ${val}px;`}
         transition: all 0.1s ease 0s;
     }
 
@@ -93,7 +95,7 @@ export const Line = styled.div<{
         border-bottom-width: 4px;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
-        width: calc(100% - 99.16px);
+        ${({val}) => `width: calc(100% - ${val}px);`}
         left: unset;
         right: 0px;
         transition: all 0.1s ease 0s;
@@ -125,9 +127,9 @@ export const Circle = styled.div<{
     width: 16px;
     height: 16px;
     top: -10px;
-    background-color: rgb(254, 230, 0);
+    background-color: #3f82a4;
     cursor: pointer;
-    left: 92.16px;
+    ${({val}) => `left: ${val - 9}px;`}
     border-radius: 40px;
     transition: all 0.1s ease 0s;
 `;

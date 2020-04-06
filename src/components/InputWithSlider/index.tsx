@@ -10,17 +10,19 @@ const Input = ({
     max,
     title,
     val,
+    changeInput,
 }) => {
     const [value, setValue] = useState(val);
     const changeHandler = (e, data) => {
         setValue(parseInt(data.value));
+        changeInput({target: parseInt(data.value)});
     };
 
     return (
         <InputWrap>
             <Label htmlFor={id} className="label">{title}</Label>
             <InputSlider
-                min={3}
+                min={1}
                 max={30}
                 mask="V лет"
                 lazy={false}
@@ -28,7 +30,7 @@ const Input = ({
                 onChange={changeHandler}
                 value={value}
             >
-                <InputSlider.Tag val={0}>1 год</InputSlider.Tag>
+                <InputSlider.Tag val={1}>1 год</InputSlider.Tag>
                 <InputSlider.Tag val={15}>15 лет</InputSlider.Tag>
                 <InputSlider.Tag val={30}>30 лет</InputSlider.Tag>
             </InputSlider>

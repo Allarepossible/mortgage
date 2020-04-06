@@ -67,6 +67,7 @@ const Form: React.FC<Props & ActionsProps> = ({
                 min={1}
                 max={30}
                 val={years}
+                changeInput={ChangeYears}
                 title="Срок погашения (полных лет)"
             />
         </Row>

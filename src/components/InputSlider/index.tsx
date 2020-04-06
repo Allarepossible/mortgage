@@ -5,6 +5,21 @@ import {Box, Container, Line, Circle, Tag, Tags, PartRight, Wrapper} from './sty
 const shift = 7;
 const shiftRight = 9;
 
+// Функция перевода из числового значения в диапазоне min-max в значение длины линии от 0 до max2
+// - ширины родителя с учетом сдвигов
+const constructValue = (min, max, max2, val) => {
+    const value = ((val - min) * (max2 - shift - shiftRight)) / (max - min) + shift;
+    // возврат с учетом граничных состояний для правильного отступа
+    if (!value || isNaN(value) || value < min) {
+        return shift;
+    }
+    if (value > max2) {
+        return max2 - shift;
+    }
+
+    return value;
+};
+
 // обратное constructValue преобразование
 const reconstructValue = (min, max, max2, val) => {
     const value = ((val - min) * max2) / (max - min);
@@ -20,7 +35,9 @@ const reconstructValue = (min, max, max2, val) => {
 };
 
 // Расчет положения тегов (меток)
-const constructValueTag = (min, max, max2, val) => ((val - min) * (max2 - shift - shiftRight)) / (max - min);
+const constructValueTag = (min, max, max2, val) => {
+    return ((val - min) * (max2 - shift - shiftRight)) / (max - min);
+};
 
 // Фабрика тегов (меток)
 const constructTags = (tags, min, max, max2, onClick) =>
@@ -47,7 +64,7 @@ export const InputSlider = React.forwardRef(
         } = props;
 
         const [drag, setDrag] = useState(false);
-        // const [val, setVal] = useState(0);
+        const [val, setVal] = useState(0);
         const isDrag = useRef({val: false});
         const numberInput = useRef<HTMLDivElement>(null);
         const container = useRef<HTMLDivElement>(null);
@@ -88,6 +105,10 @@ export const InputSlider = React.forwardRef(
             },
             [mouseMoveHandler, mouseUpHandler]
         );
+        const resizeHandler = useCallback(() => {
+            const width = (container.current && container.current.offsetWidth) || 0;
+            setVal(constructValue(min, max, width, value));
+        }, [value, min, max]);
 
         useEffect(
             () => () => {
@@ -96,6 +117,10 @@ export const InputSlider = React.forwardRef(
             },
             []
         );
+
+        useEffect(() => {
+            resizeHandler();
+        }, [value, min, max, resizeHandler]);
 
         const handleClickTag = useCallback(
             (event, value) => {
@@ -137,7 +162,7 @@ export const InputSlider = React.forwardRef(
                         />
                         <Line
                             design={design}
-                            // val={val}
+                            val={val}
                             drag={drag}
                             size={size}
                             onClick={handleLineClick}
@@ -145,7 +170,7 @@ export const InputSlider = React.forwardRef(
                             <Circle
                                 tabIndex={0}
                                 drag={drag}
-                                val={1}
+                                val={val}
                                 size={size}
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
