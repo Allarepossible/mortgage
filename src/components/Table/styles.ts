@@ -50,3 +50,8 @@ export const Title = styled.h2`
 export const Detail = styled.div`
     color: #93989d;
 `;
+
+export const Date = styled.div`
+    color: #93989d;
+    font-size: 12px;
+`;

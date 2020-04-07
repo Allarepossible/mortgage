@@ -10,30 +10,31 @@ const Input = ({
     max,
     title,
     val,
+    tags,
     changeInput,
 }) => {
     const [value, setValue] = useState(val);
     const changeHandler = (e, data) => {
-        setValue(parseInt(data.value));
-        changeInput({target: parseInt(data.value)});
+        let currentVal: string | number = '';
+        if (data) {
+            currentVal = parseInt(data.value);
+        } else if (e.target.value) {
+            currentVal = e.target.value > max ? max : parseInt(e.target.value);
+        }
+        setValue(currentVal);
+        changeInput({target: currentVal});
     };
 
     return (
         <InputWrap>
             <Label htmlFor={id} className="label">{title}</Label>
             <InputSlider
-                min={1}
-                max={30}
-                mask="V лет"
-                lazy={false}
-                blocks={{V: {mask: Number, min, max}}}
+                min={min}
+                max={max}
                 onChange={changeHandler}
                 value={value}
-            >
-                <InputSlider.Tag val={1}>1 год</InputSlider.Tag>
-                <InputSlider.Tag val={15}>15 лет</InputSlider.Tag>
-                <InputSlider.Tag val={30}>30 лет</InputSlider.Tag>
-            </InputSlider>
+                tags={tags}
+            />
         </InputWrap>
     );
 };

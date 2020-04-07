@@ -1,29 +1,20 @@
 import React, {useState, useCallback, useEffect, useRef} from 'react';
-import {Box, Container, Line, Circle, Tag, Tags, PartRight, Wrapper} from './styles';
+import {Box, Container, Line, Circle, Tag, Tags, Wrapper} from './styles';
 
-// параметры сдвига, которые нельзя передать через css или пресеты
-const shift = 7;
-const shiftRight = 9;
-
-// Функция перевода из числового значения в диапазоне min-max в значение длины линии от 0 до max2
-// - ширины родителя с учетом сдвигов
 const constructValue = (min, max, max2, val) => {
-    const value = ((val - min) * (max2 - shift - shiftRight)) / (max - min) + shift;
-    // возврат с учетом граничных состояний для правильного отступа
+    const value = ((val - min) * (max2 - 16)) / (max - min) + 7;
     if (!value || isNaN(value) || value < min) {
-        return shift;
+        return 7;
     }
     if (value > max2) {
-        return max2 - shift;
+        return max2 - 7;
     }
 
     return value;
 };
 
-// обратное constructValue преобразование
 const reconstructValue = (min, max, max2, val) => {
     const value = ((val - min) * max2) / (max - min);
-    // возврат с учетом граничных состояний
     if (!value || isNaN(value) || value < min) {
         return min;
     }
@@ -35,32 +26,17 @@ const reconstructValue = (min, max, max2, val) => {
 };
 
 // Расчет положения тегов (меток)
-const constructValueTag = (min, max, max2, val) => {
-    return ((val - min) * (max2 - shift - shiftRight)) / (max - min);
-};
-
-// Фабрика тегов (меток)
-const constructTags = (tags, min, max, max2, onClick) =>
-    React.Children.toArray(tags).map(tag =>
-        React.cloneElement(tag, {
-            val: constructValueTag(min, max, max2, tag.props.val),
-            onClick: e => onClick(e, tag.props.val),
-        })
-    );
+const constructValueTag = (min, max, max2, val) => ((val - min) * (max2 - 16)) / (max - min);
 
 export const InputSlider = React.forwardRef(
     (props: any, ref) => {
         const {
-            name,
-            design,
             min = 0,
             max = 30,
             step = 1,
-            children,
             onChange,
-            postfix,
-            size,
             value,
+            tags,
         } = props;
 
         const [drag, setDrag] = useState(false);
@@ -77,12 +53,12 @@ export const InputSlider = React.forwardRef(
                         Math.ceil(reconstructValue(min, rect.width, max / step, event.screenX - rect.x)) * step;
                     if (flag && value <= max && value >= min) {
                         if (typeof onChange === 'function') {
-                            onChange(event, {name, value});
+                            onChange(event, {value});
                         }
                     }
                 }
             },
-            [isDrag, onChange, name, max, min, step]
+            [isDrag, onChange, max, min, step]
         );
 
         const mouseUpHandler = useCallback(() => {
@@ -125,10 +101,10 @@ export const InputSlider = React.forwardRef(
         const handleClickTag = useCallback(
             (event, value) => {
                 if ( typeof onChange === 'function') {
-                    onChange(event, {name, value});
+                    onChange(event, {value});
                 }
             },
-            [name, onChange]
+            [onChange]
         );
 
         const width = (container.current && container.current.offsetWidth) || 0;
@@ -147,7 +123,6 @@ export const InputSlider = React.forwardRef(
             [ref]
         );
         const handleLineClick = useCallback((event: any) => mouseMoveHandler(event, true), [mouseMoveHandler]);
-
         const handleFocus = useCallback(() => setDrag(true), []);
         const handleBlur = useCallback(() => setDrag(false), []);
 
@@ -161,30 +136,33 @@ export const InputSlider = React.forwardRef(
                             onChange={onChange}
                         />
                         <Line
-                            design={design}
                             val={val}
                             drag={drag}
-                            size={size}
                             onClick={handleLineClick}
                         >
                             <Circle
                                 tabIndex={0}
                                 drag={drag}
                                 val={val}
-                                size={size}
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
                                 onMouseDown={handleMouseDown}
                             />
                         </Line>
                     </Container>
-                    {children && <Tags>{constructTags(children, min, max, width, handleClickTag)}</Tags>}
+                    {tags && tags.length > 0 && <Tags>
+                        {tags.map(({val: tagValue, name}) => (
+                            <Tag
+                                key={name}
+                                val={constructValueTag(min, max, width, tagValue)}
+                                onClick={e => handleClickTag(e, tagValue)}
+                            >{name}</Tag>
+                        ))}
+                    </Tags>}
                 </Container>
-                {postfix && <PartRight>{postfix}</PartRight>}
             </Box>
         );
     }
 ) as any;
-InputSlider.Tag = Tag;
 
 export default InputSlider;

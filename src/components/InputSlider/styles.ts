@@ -1,13 +1,5 @@
 import styled, {css} from 'styled-components';
 
-export const PartRight = styled.div`
-    display: flex;
-    color: rgb(170, 171, 173);
-    &:before {
-        content: '';
-    }
-`;
-
 export const Wrapper = styled.input`
     display: flex;
     flex-direction: row;
@@ -22,7 +14,7 @@ export const Wrapper = styled.input`
     box-sizing: border-box;
 `;
 
-export const Box = styled.div<{ disabled?: boolean }>`
+export const Box = styled.div`
     position: relative;
     width: 100%;
     display: flex;
@@ -30,7 +22,7 @@ export const Box = styled.div<{ disabled?: boolean }>`
     justify-content: space-between;
 `;
 
-export const Container = styled.div<{ noInput?: boolean }>`
+export const Container = styled.div`
     position: relative;
     width: 100%;
 `;
@@ -40,7 +32,7 @@ export const Tags = styled.div`
     width: 100%;
 `;
 
-export const Tag = styled.div<{ val?: number; design?: 'outline' | 'material' }>`
+export const Tag = styled.div<{val?: number}>`
     position: absolute;
     user-select: none;
     font-size: 12px;
@@ -53,23 +45,13 @@ export const Tag = styled.div<{ val?: number; design?: 'outline' | 'material' }>
         right: 0px;
         left: auto;
     }
-
-    &:first-child {
-        right: 0px;
-    }
 `;
 
-export const Line = styled.div<{
-    disabled?: boolean;
-    design?: 'outline' | 'material';
-    val?: number;
-    drag?: boolean;
-    noInput?: boolean;
-    size?: 'xl' | 'l' | 's' | 'xs';
-}>`
+export const Line = styled.div<{val?: number; drag?: boolean}>`
     position: absolute;
     user-select: none;
     width: 100%;
+    ${({drag}) => !drag && 'transition: all .1s;'}
 
     &::after{
         content: "";
@@ -103,12 +85,7 @@ export const Line = styled.div<{
     }
 `;
 
-export const Circle = styled.div<{
-    drag?: boolean;
-    val: number;
-    size?: 'xl' | 'l' | 's' | 'xs';
-}>`
-    ${({drag}) => !drag && 'transition: all .1s'}
+export const Circle = styled.div<{val: number; drag?: boolean}>`
     ${({val}) =>
         css`
             &:hover,
@@ -121,6 +98,7 @@ export const Circle = styled.div<{
                 left: ${val - 9}px;
             }
         `}
+    ${({drag}) => !drag && 'transition: all .1s;'}
     position: absolute;
     user-select: none;
     z-index: 1;

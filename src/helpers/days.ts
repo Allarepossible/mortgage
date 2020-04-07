@@ -27,11 +27,17 @@ export const secondsInDay = 60 * 60 * 24 * 1000;
 export const daysInterval = (day1, day2) =>  Math.round((day2 - day1)/secondsInDay);
 export const DaysInYear = (year: number) =>  year % 4 === 0 ? 366 : 365;
 
-const dayToStr = (day: Date) => {
-    const dayStr = day.getDate() > 9 ? day.getDate() : `0${day.getDate()}`;
-    const month = day.getMonth() > 9 ? day.getMonth() : `0${day.getMonth()}`;
+// const dayToStr = (day: Date) => {
+//     const dayStr = day.getDate() > 9 ? day.getDate() : `0${day.getDate()}`;
+//     const month = day.getMonth() > 9 ? day.getMonth() : `0${day.getMonth()}`;
+//
+//     return `${dayStr}.${month}.${day.getFullYear()}`;
+// };
 
-    return `${dayStr}.${month}.${day.getFullYear()}`;
+const dateForTable = (day: Date) => {
+    const month = months()[day.getMonth()].rus;
+
+    return `${month} ${day.getFullYear()}`;
 };
 
 const dayMonth = (day: Date) => {
@@ -60,7 +66,7 @@ export const createTable = ({credit, percent, years, startDate, payment}): Item[
 
         const AmountDaysInIntervar = daysInterval(currentDay, nextPaymentDay);
 
-        paymentObj.date = dayToStr(nextPaymentDay);
+        paymentObj.date = dateForTable(nextPaymentDay);
         paymentObj.month = dayMonth(nextPaymentDay);
 
         const creditRest = i === 0 ? credit : payments[i - 1].remainder;

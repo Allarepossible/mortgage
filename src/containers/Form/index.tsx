@@ -68,6 +68,7 @@ const Form: React.FC<Props & ActionsProps> = ({
                 max={30}
                 val={years}
                 changeInput={ChangeYears}
+                tags={[{val: 1, name: '1 год'}, {val: 15, name: '15 лет'}, {val: 30, name: '30 лет'}]}
                 title="Срок погашения (полных лет)"
             />
         </Row>
