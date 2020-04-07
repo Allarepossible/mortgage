@@ -15,20 +15,17 @@ const ComplexChart = ({
             datasets: [{
                 label: 'Основной долг',
                 data: debet,
-                backgroundColor: 'rgba(69,141,174,0.9)',
+                backgroundColor: '#53b374',
             }, {
                 label: 'Проценты',
                 data: percent,
-                backgroundColor: 'rgb(180, 0, 0, 0.5)',
+                backgroundColor: 'rgb(255, 201, 46)',
             }],
         }}
         options={{
             tooltips: {
                 mode: 'index',
                 callbacks: {
-                    title: function(tooltipItem){
-                        // return this._data.labels[tooltipItem[0].index];
-                    },
                     label: function(tooltipItems, data) {
                         return data.datasets[tooltipItems.datasetIndex].label +
                             ': ' + normalizePrice(tooltipItems.yLabel);

@@ -31,30 +31,14 @@ export const SmallInfo = styled(Info)`
     width: 40%;
 `;
 
-export const Span = styled.span`
-    font-weight: bold;
-    font-size: 17px;
+export const Span = styled.span<{color?: string}>`
+    font-size: 15px;
     width: 100%;
     display: flex;
     justify-content: space-between;
+    ${({color}) => `color: ${color || 'black'};`}
     align-items: baseline;
-    margin-bottom: 40px;
-`;
-
-export const Payment = styled(Span)`
-    margin-top: 10px;
-`;
-
-export const Total = styled(Span)`
-    color: #53b374;
-`;
-
-export const Overpayment = styled(Span)`
-    color: #b32427;
-`;
-
-export const All = styled(Span)`
-    color: #b32427;
+    margin-bottom: 15px;
 `;
 
 export const Title = styled.h2`
@@ -64,5 +48,6 @@ export const Title = styled.h2`
 `;
 
 export const Big = styled.span`
-    font-size: 23px;
+    font-weight: bold;
+    font-size: 20px;
 `;

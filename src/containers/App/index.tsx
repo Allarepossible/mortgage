@@ -6,10 +6,10 @@ import PaymentOfYearsChart from 'containers/PaymentOfYearsChart';
 import OverpaimentsChart from 'containers/OverpaimentsChart';
 import PaymentTable from 'containers/PaymentTable';
 import Form from 'containers/Form';
-// import SimplePie from 'components/SimplePie';
+import SimpleLine from 'components/SimpleLine';
 import {normalizePrice} from 'helpers/price';
 
-import {Row, Column, Big, Overpayment, Payment, Title, Total, BigInfo, SmallInfo} from './styles';
+import {Row, Column, Big, Title, BigInfo, SmallInfo, Span} from './styles';
 
 interface Props {
     credit: number;
@@ -44,16 +44,12 @@ const Index: React.FC<Props> = ({
                 <Form />
             </BigInfo>
             <SmallInfo>
-                {/*<SimplePie overpayment={overpayment} credit={credit}/>*/}
-                <Payment>Ежемесячный платеж:
-                    <Big> {normalizePrice(payment)}</Big>
-                </Payment>
-                <Total>Сумма кредита:
-                    <Big>{normalizePrice(credit)}</Big>
-                </Total>
-                <Overpayment>Переплата:
-                    <Big>{normalizePrice(overpayment)}</Big>
-                </Overpayment>
+                <SimpleLine overpayment={overpayment} credit={credit}/>
+                <h3>Результаты расчета</h3>
+                <Span>Ежемесячный платеж <Big>{normalizePrice(payment)}</Big></Span>
+                <Span color="#53b374">Сумма кредита <Big>{normalizePrice(credit)}</Big></Span>
+                <Span color="#b32427">Переплата <Big>{normalizePrice(overpayment)}</Big></Span>
+                <Span>Общая выплата <Big>{normalizePrice(credit + overpayment)}</Big></Span>
             </SmallInfo>
         </Row>
         <Row>

@@ -7,9 +7,9 @@ import {
 
 const initialState = {
     fullPrice: 6000000,
-    percent: 9.9,
-    initialFee: 2500000,
-    years: 15,
+    percent: 10,
+    initialFee: 1500000,
+    years: 20,
 };
 
 const priceToNumber = price => price.replace(/[^\d]/g, '');
