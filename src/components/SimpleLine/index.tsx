@@ -2,17 +2,17 @@ import React from 'react';
 
 import {WrapLine, Line, Credit, Row, Overpayment} from './styles';
 
-const SimpleLine = ({credit, overpayment}) => {
-    const creditPercent = Math.round(credit * 100 / (credit + overpayment));
-    const overpaymentPercent = Math.round(overpayment * 100 / (credit + overpayment));
+const SimpleLine = ({first, second, firstTitle, secondTitle}) => {
+    const firstPercent = Math.round(first * 100 / (first + second));
+    const secondPercent = Math.round(second * 100 / (first + second));
 
     return (
         <WrapLine>
             <Row>
-                <Credit>Кредит ({creditPercent}%)</Credit>
-                <Overpayment>Переплата ({overpaymentPercent}%)</Overpayment>
+                <Credit>{firstTitle} ({firstPercent}%)</Credit>
+                <Overpayment>{secondTitle} ({secondPercent}%)</Overpayment>
             </Row>
-            <Line percent={creditPercent} />
+            <Line percent={firstPercent} />
         </WrapLine>
     );
 };

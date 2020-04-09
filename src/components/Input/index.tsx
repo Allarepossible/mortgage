@@ -14,6 +14,7 @@ const Input = ({
     <InputWrap>
         <Label htmlFor={id} className="label">{title}</Label>
         <StyledInput
+            type={type === 'date' ? 'date' : 'string'}
             value={type === 'cost' ? normalizePrice(value): value}
             onChange={changeInput}
             id={id}

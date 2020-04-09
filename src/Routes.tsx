@@ -1,4 +1,4 @@
-import Contact from './pages/Contact';
+import Deposit from './pages/Deposit';
 import Home from './pages/Home';
 
 export default [{
@@ -6,6 +6,6 @@ export default [{
     path: '/',
     exact: true,
 }, {
-    ...Contact,
-    path: '/contact',
+    ...Deposit,
+    path: '/deposit',
 }];

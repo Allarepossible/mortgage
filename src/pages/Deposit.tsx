@@ -1,12 +1,12 @@
 import React from 'react';
 
 import Page from 'pages/Page';
-import MortgageBoard from 'containers/MortgageBoard';
+import DepositBoard from 'containers/DepositBoard';
 
 const Home = () => {
     return (
-        <Page title={'Mortgage Board'}>
-            <MortgageBoard />
+        <Page title={'Deposit Board'}>
+            <DepositBoard />
         </Page>
     );
 };

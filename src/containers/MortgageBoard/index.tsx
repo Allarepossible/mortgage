@@ -29,7 +29,7 @@ interface State {
     };
 }
 
-const Index: React.FC<Props> = ({
+const MortgageBoard: React.FC<Props> = ({
     credit,
     percent,
     payment,
@@ -44,7 +44,7 @@ const Index: React.FC<Props> = ({
                 <Form />
             </BigInfo>
             <SmallInfo>
-                <SimpleLine overpayment={overpayment} credit={credit}/>
+                <SimpleLine second={overpayment} first={credit} firstTitle="Кредит" secondTitle="Переплата"/>
                 <h3>Результаты расчета</h3>
                 <Span>Ежемесячный платеж <Big>{normalizePrice(payment)}</Big></Span>
                 <Span color="#53b374">Сумма кредита <Big>{normalizePrice(credit)}</Big></Span>
@@ -109,4 +109,4 @@ const mapStateToProps = ({current}: State): Props => {
     };
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect(mapStateToProps)(MortgageBoard);
