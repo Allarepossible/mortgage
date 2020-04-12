@@ -11,8 +11,9 @@ import {normalizePrice} from 'helpers/price';
 import {Row, Column, Big, Title, BigInfo, SmallInfo, Span} from './styles';
 
 interface Props {
-    initialFee: number;
-    contributions: number;
+    deposit: number;
+    contributionAmount: number;
+    contributions: [];
     allMoney: number;
     percents: number;
 }
@@ -20,13 +21,15 @@ interface Props {
 interface State {
     deposit: {
         transactions: any;
-        initialFee: number;
+        deposit: number;
+        contributions: [];
     };
 }
 
 const DepositBoard: React.FC<Props> = ({
-    initialFee,
+    deposit,
     contributions,
+    contributionAmount,
     allMoney,
     percents,
 }) => (
@@ -37,10 +40,10 @@ const DepositBoard: React.FC<Props> = ({
                 <DepositForm />
             </BigInfo>
             <SmallInfo>
-                <SimpleLine second={percents} first={initialFee} firstTitle="Вклад" secondTitle="Проценты"/>
+                <SimpleLine second={percents} first={deposit} firstTitle="Вклад" secondTitle="Проценты"/>
                 <h3>Результаты расчета доходности</h3>
-                <Span>Сумма вклада <Big>{normalizePrice(initialFee)}</Big></Span>
-                <Span>Сумма довложений <Big>{normalizePrice(contributions)}</Big></Span>
+                <Span>Сумма вклада <Big>{normalizePrice(deposit)}</Big></Span>
+                <Span>Сумма довложений <Big>{normalizePrice(contributionAmount)}</Big></Span>
                 <Span color="#53b374">Начисленные проценты <Big>{normalizePrice(percents)}</Big></Span>
                 <Span>Сумма вклада с процентами <Big>{normalizePrice(allMoney)}</Big></Span>
             </SmallInfo>
@@ -51,7 +54,7 @@ const DepositBoard: React.FC<Props> = ({
             </SmallInfo>
             <BigInfo>
                 <h3>Пополнения вклада</h3>
-                <AddingsList />
+                {contributions.length > 0 && <AddingsList />}
                 <AddingsForm />
             </BigInfo>
         </Row>
@@ -59,17 +62,18 @@ const DepositBoard: React.FC<Props> = ({
 );
 
 const mapStateToProps = ({deposit}: State): Props => {
-    const {initialFee, transactions} = deposit;
-    const {contributions, percents} = transactions.reduce((sum, {percentAmount, adding, type}) => {
+    const {deposit: depositAmount, transactions, contributions} = deposit;
+    const {contributionAmount, percents} = transactions.reduce((sum, {percentAmount, adding, type}) => {
         sum['percents'] += percentAmount;
-        sum['contributions'] += type === 'add' ? Number(adding) : 0;
+        sum['contributionAmount'] += type === 'add' ? Number(adding) : 0;
         return sum;
-    }, {percents: 0, contributions: 0});
+    }, {percents: 0, contributionAmount: 0});
     const allMoney = contributions + percents;
 
     return {
-        initialFee,
-        contributions: contributions - initialFee,
+        deposit: depositAmount,
+        contributions,
+        contributionAmount: contributionAmount - depositAmount,
         allMoney,
         percents,
     };

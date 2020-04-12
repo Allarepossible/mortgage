@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {changeMonths, changePercent, changeInitialFee, changeDate, Target} from 'actions/deposit';
+import {changePeriod, changePercent, changeDeposit, changeStartDate, Target} from 'actions/deposit';
 import Input from 'components/Input';
 import InputWithSlider from 'components/InputWithSlider';
 
@@ -11,19 +11,19 @@ interface Props {
     percent: number;
     months: number;
     startDate: Date;
-    initialFee: number;
+    deposit: number;
 }
 
 interface ActionsProps {
-    ChangeInitialFee: ({target}: Target) => void;
+    ChangeDeposit: ({target}: Target) => void;
     ChangePercent: ({target}: Target) => void;
-    ChangeMonths: ({target}: Target) => void;
+    ChangePeriod: ({target}: Target) => void;
     ChangeDate: ({target}: Target) => void;
 }
 interface State {
     deposit: {
         percent: number;
-        initialFee: number;
+        deposit: number;
         startDate: Date;
         months: number;
     };
@@ -33,17 +33,17 @@ const Form: React.FC<Props & ActionsProps> = ({
     startDate,
     percent,
     months,
-    initialFee,
-    ChangeInitialFee,
+    deposit,
+    ChangeDeposit,
     ChangePercent,
-    ChangeMonths,
+    ChangePeriod,
     ChangeDate,
 }) => (
     <StyledForm>
         <Input
-            id="initialFee"
-            value={initialFee}
-            changeInput={ChangeInitialFee}
+            id="deposit"
+            value={deposit}
+            changeInput={ChangeDeposit}
             title="Первоначальный взнос"
             type="cost"
         />
@@ -67,7 +67,7 @@ const Form: React.FC<Props & ActionsProps> = ({
                 min={1}
                 max={24}
                 val={months}
-                changeInput={ChangeMonths}
+                changeInput={ChangePeriod}
                 tags={[{val: 1, name: '1 мес'}, {val: 12, name: '12 мес'}, {val: 24, name: '24 мес'}]}
                 title="Длительность в месяцах"
             />
@@ -76,21 +76,21 @@ const Form: React.FC<Props & ActionsProps> = ({
 );
 
 const mapStateToProps = ({deposit}: State): Props => {
-    const {percent, initialFee, months, startDate} = deposit;
+    const {percent, deposit: depositAmount, months, startDate} = deposit;
 
     return {
         startDate,
         percent,
-        initialFee,
+        deposit: depositAmount,
         months,
     };
 };
 
 const mapDispatchToProps: ActionsProps = {
     ChangePercent: changePercent,
-    ChangeInitialFee: changeInitialFee,
-    ChangeMonths: changeMonths,
-    ChangeDate: changeDate,
+    ChangeDeposit: changeDeposit,
+    ChangePeriod: changePeriod,
+    ChangeDate: changeStartDate,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

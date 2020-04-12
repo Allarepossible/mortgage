@@ -22,7 +22,7 @@ const Input = ({
             currentVal = e.target.value > max ? max : parseInt(e.target.value);
         }
         setValue(currentVal);
-        changeInput({target: currentVal});
+        changeInput(currentVal);
     };
 
     return (
