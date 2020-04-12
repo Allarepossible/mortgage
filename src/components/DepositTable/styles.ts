@@ -19,14 +19,14 @@ export const HeadlineItem = styled.div`
 `;
 
 export const List = styled.div`
-    height: 500px;
+    height: 380px;
     overflow-y: auto;
     flex-direction: column;
     display: flex;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.07);
 `;
 
-export const ListItemWrap = styled.div`
+export const ListItemWrap = styled.div<{type: string}>`
     padding-right: 20px;
     font-size: 14px;
     display: flex;
@@ -37,10 +37,11 @@ export const ListItemWrap = styled.div`
         width: 30%;
         text-align: right
     }
-    
+
     &:nth-of-type(2n) {
         background-color: #f8f9fa;
     }
+    ${({type}) => type === 'add' && 'background-color: #d0f9d0 !important;'}
 `;
 
 export const Title = styled.h2`

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import DepositTable from 'containers/DepositTable';
 import DepositForm from 'containers/DepositForm';
+import AddingsForm from 'containers/AddingsForm';
 import SimpleLine from 'components/SimpleLine';
 import {normalizePrice} from 'helpers/price';
 
@@ -49,12 +50,8 @@ const DepositBoard: React.FC<Props> = ({
                 <DepositTable />
             </SmallInfo>
             <BigInfo>
-                <h3>Выплата процентов и погашение задолженности</h3>
-                {/*<PaymentAndRemainderChart*/}
-                {/*    startDate={new Date()}*/}
-                {/*    credit={credit}*/}
-                {/*    payment={payment}*/}
-                {/*/>*/}
+                <h3>Пополнения вклада</h3>
+                <AddingsForm />
             </BigInfo>
         </Row>
     </Column>

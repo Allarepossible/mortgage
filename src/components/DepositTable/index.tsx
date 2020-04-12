@@ -5,7 +5,7 @@ import {Table as StyledTable, Headline, HeadlineItem, List, ListItemWrap, Detail
 
 const Table = ({table}) => (
     <StyledTable>
-        <Title>График платежей</Title>
+        <Title>Таблица выплат процентов</Title>
         <Headline>
             <HeadlineItem>Дата</HeadlineItem>
             <HeadlineItem>Сумма %</HeadlineItem>
@@ -15,7 +15,7 @@ const Table = ({table}) => (
         <List>
             {table && table.length > 0 &&
                 table.map((item, index) => (
-                    <ListItemWrap key={index}>
+                    <ListItemWrap key={index} type={item.type}>
                         <Date>{item.date}</Date>
                         <Detail>{normalizePrice(item.percentAmount)}</Detail>
                         <Detail>{normalizePrice(item.adding)}</Detail>

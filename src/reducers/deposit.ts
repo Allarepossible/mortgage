@@ -8,7 +8,7 @@ import {
 const initialState = {
     percent: 6,
     initialFee: 400000,
-    months: 12,
+    months: 9,
     startDate: '2019-12-01',
 };
 

@@ -10,6 +10,7 @@ interface Item {
 }
 interface DepositItem {
     date: string;
+    type: string;
     adding: number;
     percentAmount: number;
     remainder: number;
@@ -56,23 +57,38 @@ export const createDepositTable = ({deposit, percent, months, startDate}) => {
     const payments = [] as DepositItem[];
     let currentDay = moment(startDate);
 
-    for (let i = 0; i < months; i++) {
-        const next = moment(currentDay.format()).add(1, 'month');
-        const paymentObj = {} as DepositItem;
+    for (let i = 0; i < months + 1; i++) {
+        if (i===3) {
+            const paymentObj = {} as DepositItem;
+            paymentObj.date = '31 Mar 2020';
 
-        const daysInterval = next.diff(currentDay, 'd');
+            const creditRest = payments[i - 1].remainder;
 
-        paymentObj.date = next.format('D MMM YYYY');
+            paymentObj.percentAmount = 0;
+            paymentObj.adding = 300000;
+            paymentObj.type = 'add';
 
-        const creditRest = i === 0 ? deposit : payments[i - 1].remainder;
+            paymentObj.remainder = creditRest + paymentObj.adding;
 
-        paymentObj.percentAmount = creditRest * percent/(100 * 365) * daysInterval;
-        paymentObj.adding = paymentObj.percentAmount;
+            payments.push(paymentObj);
+        } else {
+            const next = moment(currentDay.format()).add(1, 'month');
+            const paymentObj = {} as DepositItem;
 
-        paymentObj.remainder = creditRest + paymentObj.percentAmount;
+            const daysInterval = next.diff(currentDay, 'd');
 
-        currentDay = next;
-        payments.push(paymentObj);
+            paymentObj.date = next.format('D MMM YYYY');
+
+            const creditRest = i === 0 ? deposit : payments[i - 1].remainder;
+
+            paymentObj.percentAmount = creditRest * percent/(100 * 365) * daysInterval;
+            paymentObj.adding = paymentObj.percentAmount;
+
+            paymentObj.remainder = creditRest + paymentObj.percentAmount;
+
+            currentDay = next;
+            payments.push(paymentObj);
+        }
     }
 
     return payments;
