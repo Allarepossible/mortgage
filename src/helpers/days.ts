@@ -50,46 +50,71 @@ export const createTable = ({credit, percent, years, startDate, payment}): Item[
     return payments;
 };
 
-export const createDepositTable = ({deposit, percent, months, startDate}) => {
+export const calculateTransactions = ({deposit, percent, months, startDate, contributions}) => {
     if (deposit === 0 || months === 0) {
         return [];
     }
-    const payments = [] as DepositItem[];
+    const consObj = contributions.reduce((sum, item) => {
+        sum[item.id] = item;
+
+        return sum;
+    },{});
+    const conIds = contributions
+        .sort(({date: dateA}, {date: dateB}) => moment(dateA).diff(moment(dateB), 'd'))
+        .map(({id}) => id);
+    const transactions = [] as DepositItem[];
     let currentDay = moment(startDate);
+    let percentAmount = 0;
+    let daysIntervalWithCons;
 
-    for (let i = 0; i < months + 1; i++) {
-        if (i===3) {
-            const paymentObj = {} as DepositItem;
-            paymentObj.date = '31 Mar 2020';
+    transactions.push({
+        date: currentDay.format('D MMM YYYY'),
+        type: 'add',
+        adding: deposit,
+        percentAmount: 0,
+        remainder: deposit,
+    });
 
-            const creditRest = payments[i - 1].remainder;
+    for (let i = 0; i < months + contributions.length; i++) {
+        const nextDay = moment(currentDay.format()).add(1, 'month');
+        const paymentObj = {} as DepositItem;
 
-            paymentObj.percentAmount = 0;
-            paymentObj.adding = 300000;
-            paymentObj.type = 'add';
+        const daysInterval = nextDay.diff(currentDay, 'd');
 
-            paymentObj.remainder = creditRest + paymentObj.adding;
-
-            payments.push(paymentObj);
-        } else {
-            const next = moment(currentDay.format()).add(1, 'month');
-            const paymentObj = {} as DepositItem;
-
-            const daysInterval = next.diff(currentDay, 'd');
-
-            paymentObj.date = next.format('D MMM YYYY');
-
-            const creditRest = i === 0 ? deposit : payments[i - 1].remainder;
-
-            paymentObj.percentAmount = creditRest * percent/(100 * 365) * daysInterval;
-            paymentObj.adding = paymentObj.percentAmount;
-
-            paymentObj.remainder = creditRest + paymentObj.percentAmount;
-
-            currentDay = next;
-            payments.push(paymentObj);
+        for (const conId of conIds) {
+            const conDay = moment(consObj[conId].date);
+            const conInterval = conDay.diff(currentDay, 'd');
+            if (conInterval < daysInterval) {
+                transactions.push({
+                    date: conDay.format('D MMM YYYY'),
+                    adding: consObj[conId].amount,
+                    remainder: transactions[i].remainder + Number(consObj[conId].amount),
+                    type: 'add',
+                    percentAmount: 0,
+                });
+                conIds.splice(conIds.indexOf(conId), 1);
+                percentAmount += (transactions[i].remainder + consObj[conId].amount)
+                    * percent/(100 * 365) * conInterval;
+                daysIntervalWithCons = daysInterval - conInterval;
+                i++;
+            }
         }
+        paymentObj.date = nextDay.format('D MMM YYYY');
+
+        const creditRest = transactions[i].remainder;
+        const days = daysIntervalWithCons ? daysIntervalWithCons : daysInterval;
+
+        paymentObj.percentAmount = creditRest * percent/(100 * 365) * days + percentAmount;
+
+        paymentObj.adding = paymentObj.percentAmount;
+
+        paymentObj.remainder = creditRest + paymentObj.percentAmount;
+
+        currentDay = nextDay;
+        transactions.push(paymentObj);
+        percentAmount = 0;
+        daysIntervalWithCons = undefined;
     }
 
-    return payments;
+    return transactions;
 };

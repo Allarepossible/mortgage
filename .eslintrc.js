@@ -37,6 +37,7 @@ module.exports = {
         '@typescript-eslint/eslint-plugin'
     ],
     rules: {
+        'no-case-declarations': 0,
         'object-curly-spacing': [2, 'never'],
         'linebreak-style': [ 'error', 'unix' ],
         quotes: [ 'error', 'single' ],

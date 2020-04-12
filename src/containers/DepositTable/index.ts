@@ -1,12 +1,11 @@
 import {connect} from 'react-redux';
 
 import DepositTable from 'components/DepositTable';
-import {createDepositTable} from 'helpers/days';
 
 const mapStateToProps = ({deposit}) => {
-    const {percent, months, initialFee, startDate} = deposit;
+    const {transactions} = deposit;
 
-    const table = createDepositTable({deposit: initialFee, percent, months, startDate});
+    const table = transactions;
 
     return {
         table,
