@@ -7,11 +7,34 @@ interface DepositItem {
     percentAmount: number;
     remainder: number;
 }
+const addPeriodicIfExist = (cons, last) => {
+    const periodic = cons.filter(({periodicity}) => periodicity === 'month');
+    if (periodic.length > 0) {
+        return [...cons, ...periodic.reduce((sum, item) => {
+            const diff = last.diff(moment(item.date), 'month');
 
-export const calculateTransactions = ({deposit, percent, months, startDate, contributions}) => {
+            for (let i = 0; i < diff; i++) {
+                const date = moment(item.date).add(i + 1, 'month').format();
+
+                sum.push({
+                    date,
+                    type: 'add',
+                    amount: item.amount,
+                    id: `${item.id}-${date}`,
+                });
+            }
+            return sum;
+        }, [])];
+    } else {
+        return cons;
+    }
+};
+
+export const calculateTransactions = ({deposit, percent, months, startDate, contributions: cons}) => {
     if (deposit === 0 || months === 0) {
         return [];
     }
+    const contributions = addPeriodicIfExist(cons, moment(startDate).add(months, 'month'));
     const consObj = contributions.reduce((sum, item) => {
         sum[item.id] = item;
 
