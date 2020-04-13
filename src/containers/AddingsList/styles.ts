@@ -21,8 +21,8 @@ export const Remove = styled.button`
     background-color: #3f80a3;
     
     &:active {
-        padding: 2px 12px 7px;
-        margin: 1px 1px 1px 21px;
+        padding: 5px 7px;
+        margin: 1px 1px 1px 31px;
         background-color: #3b5e95;
     }
 `;

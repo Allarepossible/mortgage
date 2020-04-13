@@ -40,7 +40,12 @@ const DepositBoard: React.FC<Props> = ({
                 <DepositForm />
             </BigInfo>
             <SmallInfo>
-                <SimpleLine second={percents} first={deposit} firstTitle="Вклад" secondTitle="Проценты"/>
+                <SimpleLine
+                    second={percents}
+                    first={deposit + contributionAmount}
+                    firstTitle="Вклад"
+                    secondTitle="Проценты"
+                />
                 <h3>Результаты расчета доходности</h3>
                 <Span>Сумма вклада <Big>{normalizePrice(deposit)}</Big></Span>
                 <Span>Сумма довложений <Big>{normalizePrice(contributionAmount)}</Big></Span>
@@ -68,7 +73,7 @@ const mapStateToProps = ({deposit}: State): Props => {
         sum['contributionAmount'] += type === 'add' ? Number(adding) : 0;
         return sum;
     }, {percents: 0, contributionAmount: 0});
-    const allMoney = contributions + percents;
+    const allMoney = contributionAmount + percents;
 
     return {
         deposit: depositAmount,

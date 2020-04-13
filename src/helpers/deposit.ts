@@ -23,7 +23,6 @@ export const calculateTransactions = ({deposit, percent, months, startDate, cont
     const transactions = [] as DepositItem[];
     let currentDay = moment(startDate);
     let percentAmount = 0;
-    let daysIntervalWithCons;
 
     transactions.push({
         date: currentDay.format('D MMM YYYY'),
@@ -35,43 +34,40 @@ export const calculateTransactions = ({deposit, percent, months, startDate, cont
 
     for (let i = 0; i < months + contributions.length; i++) {
         const nextDay = moment(currentDay.format()).add(1, 'month');
+        let c = 0;
         const paymentObj = {} as DepositItem;
 
         const daysInterval = nextDay.diff(currentDay, 'd');
 
-        for (const conId of conIds) {
-            const conDay = moment(consObj[conId].date);
+        for (const id of conIds) {
+            const conDay = moment(consObj[id].date);
             const conInterval = conDay.diff(currentDay, 'd');
-            if (conInterval < daysInterval) {
+            const percentInterval = nextDay.diff(conDay, 'd');
+
+            if (conInterval < daysInterval && conInterval > 0) {
                 transactions.push({
                     date: conDay.format('D MMM YYYY'),
-                    adding: consObj[conId].amount,
-                    remainder: transactions[i].remainder + Number(consObj[conId].amount),
+                    adding: consObj[id].amount,
+                    remainder: transactions[i + c].remainder + Number(consObj[id].amount),
                     type: 'add',
                     percentAmount: 0,
                 });
-                conIds.splice(conIds.indexOf(conId), 1);
-                percentAmount += (transactions[i].remainder + consObj[conId].amount)
-                    * percent/(100 * 365) * conInterval;
-                daysIntervalWithCons = daysInterval - conInterval;
-                i++;
+                percentAmount += consObj[id].amount * percent/(100 * 365) * percentInterval;
+                c++;
             }
         }
         paymentObj.date = nextDay.format('D MMM YYYY');
 
-        const creditRest = transactions[i].remainder;
-        const days = daysIntervalWithCons ? daysIntervalWithCons : daysInterval;
-
-        paymentObj.percentAmount = creditRest * percent/(100 * 365) * days + percentAmount;
+        paymentObj.percentAmount = transactions[i].remainder * percent/(100 * 365) * daysInterval + percentAmount;
 
         paymentObj.adding = paymentObj.percentAmount;
 
-        paymentObj.remainder = creditRest + paymentObj.percentAmount;
+        paymentObj.remainder = transactions[i + c].remainder + paymentObj.percentAmount;
 
         currentDay = nextDay;
         transactions.push(paymentObj);
         percentAmount = 0;
-        daysIntervalWithCons = undefined;
+        i += c;
     }
 
     return transactions;

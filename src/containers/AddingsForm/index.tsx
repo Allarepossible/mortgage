@@ -14,7 +14,7 @@ interface Props {
 
 const Form = ({nextId, AddContribution}: Props) => {
     const today = moment(new Date()).format('YYYY-MM-DD');
-    const [amount, changeAmount] = useState(10000);
+    const [amount, changeAmount] = useState(100000);
     const [date, changeDate] = useState(today);
     const [periodicity, changePeriodicity] = useState('one');
 
