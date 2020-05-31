@@ -1,15 +1,16 @@
 import {connect} from 'react-redux';
 
-import DepositTable from 'components/DepositTable';
+import CommonTable from 'components/CommonTable';
 
-const mapStateToProps = ({deposit}) => {
-    const {transactions} = deposit;
+const mapStateToProps = ({deposit}) => ({
+    title: 'Таблица выплат процентов',
+    data: deposit.transactions,
+    types: [
+        {name: 'Дата', value: 'date', type: 'date'},
+        {name: 'Сумма %', value: 'percentAmount', type: 'price'},
+        {name: 'Приход на вклад', value: 'adding', type: 'price'},
+        {name: 'Остаток вклада', value: 'remainder', type: ''},
+    ],
+});
 
-    const table = transactions;
-
-    return {
-        table,
-    };
-};
-
-export default connect(mapStateToProps)(DepositTable);
+export default connect(mapStateToProps)(CommonTable);
