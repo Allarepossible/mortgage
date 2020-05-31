@@ -19,7 +19,7 @@ export const HeadlineItem = styled.div`
 `;
 
 export const List = styled.div`
-    height: 380px;
+    max-height: 440px;
     overflow-y: auto;
     flex-direction: column;
     display: flex;

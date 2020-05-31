@@ -6,10 +6,10 @@ import {Wrap, Menu, Login} from  './styles';
 const Header = () => (
     <Wrap>
         <Menu>
-            <Link to="/stats">Статистика</Link>
-            <Link to="/mortgage">Калькулятор ипотеки</Link>
+            {/*<Link to="/">Статистика</Link>*/}
+            <Link to="/">Калькулятор ипотеки</Link>
             <Link to="/deposit">Вклад</Link>
-            <Link to="/mortgage">Калькулятор досрочного погашения</Link>
+            {/*<Link to="/mortgage">Калькулятор досрочного погашения</Link>*/}
         </Menu>
         <Login>Login</Login>
     </Wrap>

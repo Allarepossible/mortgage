@@ -7,8 +7,8 @@ export const Wrap = styled.div`
     left: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    heigth: 100%;
+    box-sizing: border-box;
+    height: 100vh;
 `;
 
 export const Menu = styled.div`
@@ -26,7 +26,7 @@ export const Logo = styled.div`
 `;
 
 export const Settings = styled.div`
-    position: fixed;
+    position: absolute;
     bottom: 20px;
     left: 35px;
 `;

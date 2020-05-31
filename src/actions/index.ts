@@ -46,7 +46,7 @@ export const changeInitialFee = ({target}: Target) => async dispatch => {
         payload: target.value,
     });
 };
-export const changeYears = ({target}: Target) => async dispatch => {
+export const changeYears = (target: any) => async dispatch => {
     dispatch({
         type: CHANGE_YEARS,
         payload: target,

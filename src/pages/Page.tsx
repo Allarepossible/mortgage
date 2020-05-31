@@ -14,7 +14,7 @@ const PageWrap = styled.div`
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    height: 100vh;
+    min-height: 100vh;
     padding-left: 115px;
 `;
 
