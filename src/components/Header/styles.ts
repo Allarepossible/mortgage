@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 export const Wrap = styled.div`
     display: flex;
@@ -11,16 +12,6 @@ export const Menu = styled.div`
     display: flex;
     font-size: 15px;
     font-weight: 600;
-    
-    & > a {
-        margin-right: 40px;
-        color: white;
-        text-decoration: none;
-        
-        &:hover {
-            text-decoration: underline;
-        }
-    }
 `;
 
 export const Login = styled.button`
@@ -36,4 +27,15 @@ export const Login = styled.button`
         background-color: white;
         color: #3f82a4;
     }
+`;
+
+export const StyledLink = styled(Link)<{active: number}>`
+    margin-right: 40px;
+    ${({active}) => active === 1 ? 'color: #000;' : 'color: #fff;'}
+    text-decoration: none;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+
 `;

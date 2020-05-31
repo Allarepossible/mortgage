@@ -8,6 +8,7 @@ import Sidebar from 'components/Sidebar';
 export interface PageProps {
     children: React.ReactNode;
     title: string;
+    path?: string;
 }
 
 const PageWrap = styled.div`
@@ -26,7 +27,7 @@ const Content = styled.div`
     flex-grow: 1;
 `;
 
-const Page = ({children, title}: PageProps) => {
+const Page = ({children, title, path}: PageProps) => {
     useEffect(() => {
         document.title = title;
     }, [title]);
@@ -34,7 +35,7 @@ const Page = ({children, title}: PageProps) => {
     return (
         <PageWrap>
             <GlobalStyle />
-            <Header />
+            <Header activePath={path} />
             <Sidebar />
             <Content>
                 {children}

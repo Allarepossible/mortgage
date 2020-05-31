@@ -5,7 +5,7 @@ import MortgageBoard from 'containers/MortgageBoard';
 
 const Home = () => {
     return (
-        <Page title={'Mortgage Board'}>
+        <Page title="Mortgage Board"  path="/">
             <MortgageBoard />
         </Page>
     );

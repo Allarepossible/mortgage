@@ -1,15 +1,21 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
-import {Wrap, Menu, Login} from  './styles';
+import {Wrap, Menu, Login, StyledLink} from  './styles';
 
-const Header = () => (
+const LINKS = [
+    {title: 'Калькулятор', path: '/'},
+    {title: 'Вклад', path: '/deposit'},
+    {title: 'Калькулятор досрочного погашения', path: '/mortgage'},
+];
+
+const Header = ({activePath}) => (
     <Wrap>
         <Menu>
-            {/*<Link to="/">Статистика</Link>*/}
-            <Link to="/">Калькулятор ипотеки</Link>
-            <Link to="/deposit">Вклад</Link>
-            <Link to="/mortgage">Калькулятор досрочного погашения</Link>
+            {
+                LINKS.map(({title, path}, i) => (
+                    <StyledLink active={path === activePath ? 1 : 0} to={path} key={i}>{title}</StyledLink>
+                ))
+            }
         </Menu>
         <Login>Login</Login>
     </Wrap>

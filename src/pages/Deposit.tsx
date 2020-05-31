@@ -5,7 +5,7 @@ import DepositBoard from 'containers/DepositBoard';
 
 const Home = () => {
     return (
-        <Page title={'Deposit Board'}>
+        <Page title="Deposit Board" path="/deposit">
             <DepositBoard />
         </Page>
     );

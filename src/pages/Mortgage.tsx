@@ -5,7 +5,7 @@ import MortgageWithPayments from 'containers/MortgageWithPayments';
 
 const Mortgage = () => {
     return (
-        <Page title={'Mortgage with additional payments'}>
+        <Page title="Mortgage with additional payments"  path="/mortgage">
             <MortgageWithPayments />
         </Page>
     );
