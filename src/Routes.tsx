@@ -1,4 +1,5 @@
 import Deposit from './pages/Deposit';
+import Mortgage from './pages/Mortgage';
 import Home from './pages/Home';
 
 export default [{
@@ -8,4 +9,7 @@ export default [{
 }, {
     ...Deposit,
     path: '/deposit',
+}, {
+    ...Mortgage,
+    path: '/mortgage',
 }];

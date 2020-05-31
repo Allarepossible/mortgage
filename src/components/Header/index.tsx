@@ -9,7 +9,7 @@ const Header = () => (
             {/*<Link to="/">Статистика</Link>*/}
             <Link to="/">Калькулятор ипотеки</Link>
             <Link to="/deposit">Вклад</Link>
-            {/*<Link to="/mortgage">Калькулятор досрочного погашения</Link>*/}
+            <Link to="/mortgage">Калькулятор досрочного погашения</Link>
         </Menu>
         <Login>Login</Login>
     </Wrap>
