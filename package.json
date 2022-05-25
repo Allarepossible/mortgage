@@ -11,7 +11,7 @@
     "test:coverage": "jest --coverage",
     "conf": "node ./conf.js"
   },
-  "author": "Leisan Gilfanova",
+  "author": "Leisan Bakulina",
   "repository": "https://github.com/allarepossible/base",
   "license": "ISC",
   "dependencies": {
