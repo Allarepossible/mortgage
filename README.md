@@ -1,7 +1,12 @@
-# Calculation of mortgage
+#SSR react Typescript#
 
-Visualize payments
+**Used technologies**
 
-- npm i
-- npm start
+- typescript
+- styled-components
+- react
+- redux
+- jest
+
+
 
